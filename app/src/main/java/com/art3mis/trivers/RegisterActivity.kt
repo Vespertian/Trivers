@@ -22,7 +22,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var editText_PasswordR: EditText
     private lateinit var progessBar: ProgressBar
     private lateinit var dbreference: DatabaseReference
-    private lateinit var databese: FirebaseDatabase
+    private lateinit var database: FirebaseDatabase
     private lateinit var auth: FirebaseAuth
 
     private lateinit var name: String
@@ -48,10 +48,10 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
 
         progessBar = findViewById(R.id.progressBar)
 
-        databese = FirebaseDatabase.getInstance()
+        database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        dbreference = databese.reference.child("User")
+        dbreference = database.reference.child("User")
 
     }
 
