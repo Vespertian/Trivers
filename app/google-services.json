@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "862646870110",
+    "firebase_url": "https://trivers-bccf3.firebaseio.com",
+    "project_id": "trivers-bccf3",
+    "storage_bucket": "trivers-bccf3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862646870110:android:e882ac7a2c0ef94d",
+        "android_client_info": {
+          "package_name": "com.art3mis.trivers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862646870110-19063r6cn4be9mijaau3nel8u5kekkrf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.art3mis.trivers",
+            "certificate_hash": "d2f1bd2c6a852251e0f4ad35dc59cb075c1773e9"
+          }
+        },
+        {
+          "client_id": "862646870110-359pusc6cevpdi5mgpim1k760c59gg85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZkwMItPG3gh6PNQkTbH6WgRzliRN3rdY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862646870110-359pusc6cevpdi5mgpim1k760c59gg85.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
