@@ -52,7 +52,6 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         auth = FirebaseAuth.getInstance()
 
         dbreference = database.reference.child("User")
-
     }
 
     fun register(view: View){
@@ -76,12 +75,13 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     }
 
     private fun createNewAccount(){
+        alertV = ""
         if (!name.isEmpty()&&!lastName.isEmpty()&&!age.isEmpty()&&!email.isEmpty()&&!password.isEmpty()){
             if(age.toInt()<18){
                 alert("Por favor no sigas intentando") {
                     title("Error")
+                    okButton {action()}
                 }.show()
-                this.finish()
             } else{
                 progessBar.visibility = View.VISIBLE
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this){
@@ -100,17 +100,20 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
             }
         } else {
             alertV = ""
-            if (name.isEmpty()){
-                alertV += "Nombre\n"
-            } else if (lastName.isEmpty()){
-                alertV += "Apellido\n"
-            } else if (age.isEmpty()){
-                alertV += "Edad\n"
-            } else if (email.isEmpty()){
-                alertV += "Correo\n"
-            } else if (password.isEmpty()){
-                alertV += "Contraseña\n"
+            while (name.isEmpty()||lastName.isEmpty()||age.isEmpty()||email.isEmpty()||password.isEmpty()){
+                if (name.isEmpty()){
+                    alertV += "Nombre\n"
+                } else if (lastName.isEmpty()){
+                    alertV += "Apellido\n"
+                } else if (age.isEmpty()){
+                    alertV += "Edad\n"
+                } else if (email.isEmpty()){
+                    alertV += "Correo\n"
+                } else if (password.isEmpty()){
+                    alertV += "Contraseña\n"
+                }
             }
+
             alert("No has ingresado:\n" + alertV) {
                 title("Datos incompletos")
                 yesButton {  }
