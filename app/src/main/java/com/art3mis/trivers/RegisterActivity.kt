@@ -99,24 +99,17 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                 }
             }
         } else {
-            alertV = ""
-            while (name.isEmpty()||lastName.isEmpty()||age.isEmpty()||email.isEmpty()||password.isEmpty()){
-                if (name.isEmpty()){
-                    alertV += "Nombre\n"
-                } else if (lastName.isEmpty()){
-                    alertV += "Apellido\n"
-                } else if (age.isEmpty()){
-                    alertV += "Edad\n"
-                } else if (email.isEmpty()){
-                    alertV += "Correo\n"
-                } else if (password.isEmpty()){
-                    alertV += "Contraseña\n"
-                }
+            when {
+                name.isEmpty() -> alertV += "Nombre\n"
+                lastName.isEmpty() -> alertV += "Apellido\n"
+                age.isEmpty() -> alertV += "Edad\n"
+                email.isEmpty() -> alertV += "Correo\n"
+                password.isEmpty() -> alertV += "Contraseña\n"
             }
 
             alert("No has ingresado:\n" + alertV) {
                 title("Datos incompletos")
-                yesButton {  }
+                yesButton { alertV = "" }
             }.show()
         }
     }
