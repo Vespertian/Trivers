@@ -13,6 +13,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import org.jetbrains.anko.alert
+import android.util.Patterns
+import android.text.TextUtils
+import java.util.regex.Pattern
+
 
 class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var editText_Name: EditText
@@ -30,7 +34,6 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var age: String
     private lateinit var email: String
     private lateinit var password: String
-    private lateinit var alertV: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,8 +77,23 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
 
     }
 
+    val EMAIL_ADDRESS_PATTERN = Pattern.compile(
+         "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+         "\\@" +
+         "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+         "(" +
+         "\\." +
+         "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+         ")+"
+    )
+
+    private fun validateEmail(email: String): Boolean {
+        val pattern = Patterns.EMAIL_ADDRESS
+        return pattern.matcher(email).matches()
+    }
+
+
     private fun createNewAccount(){
-        alertV = ""
         if (!name.isEmpty()&&!lastName.isEmpty()&&!age.isEmpty()&&!email.isEmpty()&&!password.isEmpty()){
             if(age.toInt()<18){
                 alert("Por favor no sigas intentando") {
@@ -83,33 +101,32 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                     okButton {action()}
                 }.show()
             } else{
-                progessBar.visibility = View.VISIBLE
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this){
-                    task ->
+                if (validateEmail(email)){
+                    progessBar.visibility = View.VISIBLE
+                    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this){
+                        task ->
 
-                    if (task.isComplete){
-                        val user:FirebaseUser? = auth.currentUser
-                        verifyEmail(user)
+                        if (task.isComplete){
+                            val user:FirebaseUser? = auth.currentUser
+                            verifyEmail(user)
 
-                        val userBD = dbreference.child(user?.uid!!)
-                        userBD.child("Name").setValue(name)
-                        userBD.child("lastName").setValue(lastName)
-                        action()
+                            val userBD = dbreference.child(user?.uid!!)
+                            userBD.child("Name").setValue(name)
+                            userBD.child("lastName").setValue(lastName)
+                            action()
+                        }
                     }
+                } else{
+                    alert("Correo electrónico no válido") {
+                        title("Error de Email")
+                        yesButton {  }
+                    }.show()
                 }
             }
         } else {
-            when {
-                name.isEmpty() -> alertV += "Nombre\n"
-                lastName.isEmpty() -> alertV += "Apellido\n"
-                age.isEmpty() -> alertV += "Edad\n"
-                email.isEmpty() -> alertV += "Correo\n"
-                password.isEmpty() -> alertV += "Contraseña\n"
-            }
-
-            alert("No has ingresado:\n" + alertV) {
+            alert("Por favor ingresa todos los datos para poder continuar") {
                 title("Datos incompletos")
-                yesButton { alertV = "" }
+                yesButton {}
             }.show()
         }
     }
