@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Patterns
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -13,9 +14,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import org.jetbrains.anko.alert
-import android.util.Patterns
-import android.text.TextUtils
-import java.util.regex.Pattern
 
 
 class RegisterActivity : AppCompatActivity(), TextWatcher {
@@ -77,16 +75,6 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
 
     }
 
-    val EMAIL_ADDRESS_PATTERN = Pattern.compile(
-         "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-         "\\@" +
-         "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-         "(" +
-         "\\." +
-         "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-         ")+"
-    )
-
     private fun validateEmail(email: String): Boolean {
         val pattern = Patterns.EMAIL_ADDRESS
         return pattern.matcher(email).matches()
@@ -98,7 +86,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
             if(age.toInt()<18){
                 alert("Por favor no sigas intentando") {
                     title("Error")
-                    okButton {action()}
+                    okButton {actionLoginActivity()}
                 }.show()
             } else{
                 if (validateEmail(email)){
@@ -113,7 +101,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                             val userBD = dbreference.child(user?.uid!!)
                             userBD.child("Name").setValue(name)
                             userBD.child("lastName").setValue(lastName)
-                            action()
+                            actionLoginActivity()
                         }
                     }
                 } else{
@@ -131,7 +119,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
-    fun action(){
+    fun actionLoginActivity(){
         startActivity(Intent(this, LoginActivity::class.java))
     }
 

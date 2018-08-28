@@ -11,18 +11,22 @@
     <EditText
         android:id="@+id/editText_emailFP"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:ems="10"
+        android:layout_marginVertical="20dp"
+        android:layout_marginHorizontal="10dp"
         android:hint="Ingrese el correo de su cuenta"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:background="@color/colorAccent"/>
 
     <Button
         android:id="@+id/button_ForgotPass"
         android:onClick="sendFP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
         android:text="Enviar contraseña"
-        android:background="@color/colorPrimaryDark"
+        android:background="@drawable/contorno"
         android:textColor="@android:color/white"/>
 
     <ProgressBar
