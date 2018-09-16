@@ -61,7 +61,15 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
                 task ->
 
                 if(task.isSuccessful){
-                    action()
+                    if (auth.currentUser!!.isEmailVerified){
+                        action()
+                    } else{
+                        alert("Hemos enviado un correo a tu email, por favor verifícalo ") {
+                            title("Error al iniciar sesión")
+                            yesButton {  }
+                        }.show()
+                    }
+
                 } else{
                     alert("Correo electrónico o contraseña no válidos") {
                         title("Error al iniciar sesión")

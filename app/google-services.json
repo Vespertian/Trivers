@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "862646870110-af363sn0r3hh77lulp0053jr0n9gmecf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.art3mis.trivers",
+            "certificate_hash": "6651b3b7259d344e13bc3edad0cd88bdeffed4dd"
+          }
+        },
+        {
+          "client_id": "862646870110-ca97endkl5ktagkn47i3ntcls4sqcgss.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.art3mis.trivers",
+            "certificate_hash": "7b686d0cefd4cecb35ceea3e71aa0e01e9bd5569"
+          }
+        },
+        {
           "client_id": "862646870110-359pusc6cevpdi5mgpim1k760c59gg85.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -40,7 +56,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "862646870110-359pusc6cevpdi5mgpim1k760c59gg85.apps.googleusercontent.com",
+              "client_id": "862646870110-vhkdq2ri4ncgprappqligcjqsdq6ve00.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

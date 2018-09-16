@@ -80,6 +80,13 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         return pattern.matcher(email).matches()
     }
 
+    fun actionInformationActivity(){
+        startActivity(Intent(this, InformationActivity::class.java))
+    }
+
+    open fun actionLoginActivity(){
+        startActivity(Intent(this, LoginActivity::class.java))
+    }
 
     private fun createNewAccount(){
         if (!name.isEmpty()&&!lastName.isEmpty()&&!age.isEmpty()&&!email.isEmpty()&&!password.isEmpty()){
@@ -101,7 +108,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                             val userBD = dbreference.child(user?.uid!!)
                             userBD.child("Name").setValue(name)
                             userBD.child("lastName").setValue(lastName)
-                            actionLoginActivity()
+                            userBD.child("age").setValue(age)
+                            actionInformationActivity()
                         }
                     }
                 } else{
@@ -117,10 +125,6 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                 yesButton {}
             }.show()
         }
-    }
-
-    fun actionLoginActivity(){
-        startActivity(Intent(this, LoginActivity::class.java))
     }
 
     private fun verifyEmail(user: FirebaseUser?){

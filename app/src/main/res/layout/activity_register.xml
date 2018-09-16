@@ -16,18 +16,16 @@
         android:ems="10"
         android:hint="Nombre"
         android:inputType="textPersonName"
-        android:background="@color/colorAccent"
         android:layout_marginVertical="5dp"/>
 
     <EditText
         android:id="@+id/editText_LastName"
+        android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:ems="10"
         android:hint="Apellido"
-        android:inputType="textPersonName"
-        android:layout_marginVertical="5dp"
-        android:background="@color/colorAccent"/>
+        android:layout_marginVertical="5dp" />
 
     <EditText
         android:id="@+id/editText_Age"
@@ -35,8 +33,7 @@
         android:layout_height="40dp"
         android:ems="10"
         android:hint="Edad"
-        android:inputType="textPersonName"
-        android:background="@color/colorAccent"
+        android:inputType="number"
         android:layout_marginVertical="5dp"/>
 
     <EditText
@@ -46,7 +43,6 @@
         android:ems="10"
         android:hint="Correo"
         android:inputType="textEmailAddress"
-        android:background="@color/colorAccent"
         android:layout_marginVertical="5dp"/>
 
     <EditText
@@ -56,15 +52,16 @@
         android:ems="10"
         android:hint="Contraseña"
         android:inputType="textPassword"
-        android:background="@color/colorAccent"
         android:layout_marginVertical="5dp"/>
 
     <Button
         android:id="@+id/button_Register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/contorno"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+        android:backgroundTint="@color/colorPrimaryDark"
         android:onClick="register"
         android:text="Registrar"
         android:textColor="@android:color/white" />
