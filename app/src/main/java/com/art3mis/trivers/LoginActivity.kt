@@ -30,6 +30,9 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
 
         progessBarL = findViewById(R.id.progressBarL)
         auth = FirebaseAuth.getInstance()
+
+        email = ""
+        password = ""
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -37,7 +40,8 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+        email = ""
+        password = ""
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -56,12 +60,12 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
     private fun loginUser(){
         if (!email.isEmpty()&&!password.isEmpty()){
             progessBarL.visibility = View.VISIBLE
-
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this){
                 task ->
 
                 if(task.isSuccessful){
                     if (auth.currentUser!!.isEmailVerified){
+                        progessBarL.visibility = View.INVISIBLE
                         action()
                     } else{
                         alert("Hemos enviado un correo a tu email, por favor verifícalo ") {
@@ -69,14 +73,19 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
                             yesButton {  }
                         }.show()
                     }
-
                 } else{
                     alert("Correo electrónico o contraseña no válidos") {
                         title("Error al iniciar sesión")
                         yesButton {  }
                     }.show()
                 }
+                progessBarL.visibility = View.INVISIBLE
             }
+        } else{
+            alert("Correo electrónico o contraseña no válidos") {
+                title("Error al iniciar sesión")
+                yesButton {  }
+            }.show()
         }
     }
 

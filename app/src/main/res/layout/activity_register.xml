@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,50 +8,109 @@
     tools:context=".RegisterActivity"
     android:gravity="center">
 
-    <EditText
-        android:id="@+id/editText_Name"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:hint="Nombre"
-        android:inputType="textPersonName"
-        android:layout_marginVertical="5dp"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/editText_LastName"
-        android:inputType="textPersonName"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:hint="Apellido"
-        android:layout_marginVertical="5dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editText_Age"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:hint="Edad"
-        android:inputType="number"
-        android:layout_marginVertical="5dp"/>
+            <EditText
+                android:id="@+id/editText_Name"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginVertical="5dp"
+                android:ems="10"
+                android:hint="Nombre"
+                android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/editText_EmailR"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:hint="Correo"
-        android:inputType="textEmailAddress"
-        android:layout_marginVertical="5dp"/>
+            <EditText
+                android:id="@+id/editText_LastName"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginVertical="5dp"
+                android:ems="10"
+                android:hint="Apellido"
+                android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/editText_PasswordR"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        android:layout_marginVertical="5dp"/>
+            <EditText
+                android:id="@+id/editText_Age"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginVertical="5dp"
+                android:ems="10"
+                android:hint="Edad"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/editText_EmailR"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginVertical="5dp"
+                android:ems="10"
+                android:hint="Correo"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/editText_PasswordR"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginVertical="5dp"
+                android:ems="10"
+                android:hint="Contraseña"
+                android:inputType="textPassword" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="left"
+                android:text="¿Qué rango de edad buscas?"
+                android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginVertical="5dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_RangoMinimo"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Mínimo"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/editText_RangoMaximo"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Máximo"
+                    android:inputType="number" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Proporciona una descripción pública:"
+                android:textSize="18sp" />
+            <EditText
+                android:id="@+id/editText_Description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginVertical="5dp"
+                android:inputType="textAutoCorrect"
+                android:hint="Máximo XXX palabras" />
+        </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/button_Register"

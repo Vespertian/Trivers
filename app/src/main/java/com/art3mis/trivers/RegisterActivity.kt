@@ -1,5 +1,6 @@
 package com.art3mis.trivers
 
+import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -22,6 +23,9 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var editText_Age: EditText
     private lateinit var editText_EmailR: EditText
     private lateinit var editText_PasswordR: EditText
+    private lateinit var editText_RangoMinimo: EditText
+    private lateinit var editText_RangoMaximo: EditText
+    private lateinit var editText_Description: EditText
     private lateinit var progessBar: ProgressBar
     private lateinit var dbreference: DatabaseReference
     private lateinit var database: FirebaseDatabase
@@ -32,6 +36,9 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var age: String
     private lateinit var email: String
     private lateinit var password: String
+    private lateinit var rangoMinimo: String
+    private lateinit var rangoMaximo: String
+    private lateinit var description: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +48,17 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         editText_Age = findViewById(R.id.editText_Age)
         editText_EmailR = findViewById(R.id.editText_EmailR)
         editText_PasswordR = findViewById(R.id.editText_PasswordR)
+        editText_RangoMinimo = findViewById(R.id.editText_RangoMinimo)
+        editText_RangoMaximo = findViewById(R.id.editText_RangoMaximo)
+        editText_Description = findViewById(R.id.editText_Description)
         editText_Name.addTextChangedListener(this)
         editText_LastName.addTextChangedListener(this)
         editText_Age.addTextChangedListener(this)
         editText_EmailR.addTextChangedListener(this)
         editText_PasswordR.addTextChangedListener(this)
+        editText_RangoMinimo.addTextChangedListener(this)
+        editText_RangoMaximo.addTextChangedListener(this)
+        editText_Description.addTextChangedListener(this)
 
         progessBar = findViewById(R.id.progressBar)
 
@@ -53,6 +66,14 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         auth = FirebaseAuth.getInstance()
 
         dbreference = database.reference.child("User")
+        name = ""
+        lastName = ""
+        age = ""
+        email = ""
+        password = ""
+        rangoMinimo = ""
+        rangoMaximo = ""
+        description = ""
     }
 
     fun register(view: View){
@@ -65,6 +86,9 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         age = editText_Age.text.toString()
         email = editText_EmailR.text.toString()
         password = editText_PasswordR.text.toString()
+        rangoMinimo = editText_RangoMinimo.text.toString()
+        rangoMaximo = editText_RangoMaximo.text.toString()
+        description = editText_Description.text.toString()
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -72,7 +96,14 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+        name = ""
+        lastName = ""
+        age = ""
+        email = ""
+        password = ""
+        rangoMinimo = ""
+        rangoMaximo = ""
+        description = ""
     }
 
     private fun validateEmail(email: String): Boolean {
@@ -80,16 +111,12 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         return pattern.matcher(email).matches()
     }
 
-    fun actionInformationActivity(){
-        startActivity(Intent(this, InformationActivity::class.java))
-    }
-
-    open fun actionLoginActivity(){
+    fun actionLoginActivity(){
         startActivity(Intent(this, LoginActivity::class.java))
     }
 
     private fun createNewAccount(){
-        if (!name.isEmpty()&&!lastName.isEmpty()&&!age.isEmpty()&&!email.isEmpty()&&!password.isEmpty()){
+        if (!name.isEmpty()&&!lastName.isEmpty()&&!age.isEmpty()&&!email.isEmpty()&&!password.isEmpty()&&!rangoMinimo.isEmpty()&&!rangoMaximo.isEmpty()&&!description.isEmpty()){
             if(age.toInt()<18){
                 alert("Por favor no sigas intentando") {
                     title("Error")
@@ -109,8 +136,21 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                             userBD.child("Name").setValue(name)
                             userBD.child("lastName").setValue(lastName)
                             userBD.child("age").setValue(age)
-                            actionInformationActivity()
+                            userBD.child("rangoMinimo").setValue(rangoMinimo)
+                            userBD.child("rangoMaximo").setValue(rangoMaximo)
+                            userBD.child("description").setValue(description)
+
+                            alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
+                                title("Registro completado")
+                                okButton {actionLoginActivity()}
+                            }.show()
+                        } else{
+                            alert("No se pudo crear la cuenta") {
+                                title("Error")
+                                okButton {}
+                            }.show()
                         }
+                        progessBar.visibility = View.INVISIBLE
                     }
                 } else{
                     alert("Correo electrónico no válido") {
