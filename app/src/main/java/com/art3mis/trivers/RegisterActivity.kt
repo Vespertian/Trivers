@@ -1,6 +1,5 @@
 package com.art3mis.trivers
 
-import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -15,7 +14,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import org.jetbrains.anko.alert
-
 
 class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var editText_Name: EditText
@@ -65,7 +63,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        dbreference = database.reference.child("User")
+        dbreference = FirebaseDatabase.getInstance().getReference("Users")
         name = ""
         lastName = ""
         age = ""
@@ -131,22 +129,31 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                         if (task.isComplete){
                             val user:FirebaseUser? = auth.currentUser
                             verifyEmail(user)
+                            val arrayList = arrayListOf<String>()
+                            arrayList.add(name)
+                            arrayList.add(lastName)
+                            arrayList.add(age)
+                            arrayList.add(rangoMinimo)
+                            arrayList.add(rangoMaximo)
+                            arrayList.add(description)
+                            dbreference.child(user!!.uid).setValue(arrayList).addOnCompleteListener {
+                                task ->
 
-                            val userBD = dbreference.child(user?.uid!!)
-                            userBD.child("Name").setValue(name)
-                            userBD.child("lastName").setValue(lastName)
-                            userBD.child("age").setValue(age)
-                            userBD.child("rangoMinimo").setValue(rangoMinimo)
-                            userBD.child("rangoMaximo").setValue(rangoMaximo)
-                            userBD.child("description").setValue(description)
+                                if (!task.isComplete){
+                                    alert("No se ha podido crear tu cuenta") {
+                                        title("Error de registro")
+                                        okButton {actionLoginActivity()}
+                                    }.show()
+                                }
+                            }
 
                             alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
                                 title("Registro completado")
                                 okButton {actionLoginActivity()}
                             }.show()
                         } else{
-                            alert("No se pudo crear la cuenta") {
-                                title("Error")
+                            alert("No se ha podido crear tu cuenta") {
+                                title("Error de registro")
                                 okButton {}
                             }.show()
                         }
