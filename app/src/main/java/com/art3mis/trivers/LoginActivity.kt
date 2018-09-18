@@ -30,9 +30,6 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
 
         progessBarL = findViewById(R.id.progressBarL)
         auth = FirebaseAuth.getInstance()
-
-        email = ""
-        password = ""
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -66,7 +63,9 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
                 if(task.isSuccessful){
                     if (auth.currentUser!!.isEmailVerified){
                         progessBarL.visibility = View.INVISIBLE
-                        action()
+                        action_PrivateProfile()
+                        //intent.putExtra("Correo", email)
+                        //intent.putExtra("Contraseña", password)
                     } else{
                         alert("Hemos enviado un correo a tu email, por favor verifícalo ") {
                             title("Error al iniciar sesión")
@@ -89,7 +88,7 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
-    private fun action(){
+    private fun action_PrivateProfile(){
         startActivity(Intent(this, PrivateProfileActivity::class.java))
     }
 

@@ -62,8 +62,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
 
         database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
-
         dbreference = FirebaseDatabase.getInstance().getReference("Users")
+
         name = ""
         lastName = ""
         age = ""
@@ -129,23 +129,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                         if (task.isComplete){
                             val user:FirebaseUser? = auth.currentUser
                             verifyEmail(user)
-                            val arrayList = arrayListOf<String>()
-                            arrayList.add(name)
-                            arrayList.add(lastName)
-                            arrayList.add(age)
-                            arrayList.add(rangoMinimo)
-                            arrayList.add(rangoMaximo)
-                            arrayList.add(description)
-                            dbreference.child(user!!.uid).setValue(arrayList).addOnCompleteListener {
-                                task ->
 
-                                if (!task.isComplete){
-                                    alert("No se ha podido crear tu cuenta") {
-                                        title("Error de registro")
-                                        okButton {actionLoginActivity()}
-                                    }.show()
-                                }
-                            }
+                            information().registerInformation(user!!, name, lastName, age, rangoMinimo, rangoMaximo, description)
 
                             alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
                                 title("Registro completado")
