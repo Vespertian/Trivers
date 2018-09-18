@@ -1,19 +1,40 @@
 package com.art3mis.trivers
 
+import android.content.ClipDescription
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
-import android.widget.EditText
-import android.widget.ProgressBar
+import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import org.jetbrains.anko.alert
+import java.io.IOException
+import android.widget.EditText
+import android.widget.ProgressBar
+import org.jetbrains.anko.alert
+
+import android.net.Uri
+import android.text.TextUtils
+import android.util.Log
+import android.webkit.MimeTypeMap
+import android.widget.*
+
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+
+import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
+import java.io.InputStream
+
 
 class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var editText_Name: EditText
@@ -37,6 +58,17 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var rangoMinimo: String
     private lateinit var rangoMaximo: String
     private lateinit var description: String
+    private lateinit var btnChoose: Button
+    private lateinit var imgView: ImageView
+    private val GALLERY =1
+    private val CAMARA =2
+    private var fileURI:Uri? =null
+    private var bitmap: Bitmap? = null
+    private var imageReference: StorageReference? = null
+    private val TAG = "RegisterActivity"
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +94,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
 
         database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
-        dbreference = FirebaseDatabase.getInstance().getReference("Users")
+        imageReference = FirebaseStorage.getInstance().reference.child("images")
+        dbreference = database.reference.child("User")
 
         name = ""
         lastName = ""
@@ -72,6 +105,10 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         rangoMinimo = ""
         rangoMaximo = ""
         description = ""
+        btnChoose =findViewById(R.id.btnChoose)
+        imgView=findViewById(R.id.imageView)
+        btnChoose!!.setOnClickListener{mostrarImgs()}
+
     }
 
     fun register(view: View){
@@ -132,13 +169,32 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
 
                             information().registerInformation(user!!, name, lastName, age, rangoMinimo, rangoMaximo, description)
 
+                            if(fileURI!=null){
+                                val nombreImg=user!!.toString()+"pFoto"
+                                val baos =ByteArrayOutputStream()
+                                bitmap!!.compress(Bitmap.CompressFormat.JPEG,50,baos)
+                                val data:ByteArray=baos.toByteArray()
+
+                                val fileRef = imageReference!!.child(nombreImg + "." + getFileExtension(fileURI!!))
+                                fileRef.putBytes(data)
+                                        .addOnSuccessListener { taskSnapshot ->
+                                            Log.e(TAG, "Uri: " + taskSnapshot.downloadUrl)
+                                            Log.e(TAG, "Name: " + taskSnapshot.metadata!!.name)
+                                            Toast.makeText(this, "File Uploaded ", Toast.LENGTH_LONG).show()
+                                        }
+                                        .addOnFailureListener { exception ->
+                                            Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
+                                        }
+
+                            }
+
                             alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
                                 title("Registro completado")
                                 okButton {actionLoginActivity()}
                             }.show()
                         } else{
-                            alert("No se ha podido crear tu cuenta") {
-                                title("Error de registro")
+                            alert("No se pudo crear la cuenta") {
+                                title("Error")
                                 okButton {}
                             }.show()
                         }
@@ -157,6 +213,57 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                 yesButton {}
             }.show()
         }
+    }
+
+    private fun mostrarImgs() {
+        val pDialog = AlertDialog.Builder(this)
+        pDialog.setTitle("Seleccionar")
+        val pDialogItem= arrayOf("Galería","Camara")
+        pDialog.setItems(pDialogItem){
+            dialog, which -> when(which){
+            0 ->escogerImg()
+            1 ->tomarImg()
+        }
+
+        }
+    }
+
+    private fun tomarImg() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent,CAMARA)
+    }
+
+    private fun escogerImg() {
+        val galeriaIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(galeriaIntent, GALLERY)
+    }
+
+    public override fun onActivityResult(requestCode:Int, resultCode:Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GALLERY){
+            if (data!=null){
+                fileURI = data.data
+                try{
+                    bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,fileURI)
+                    imgView.setImageBitmap(bitmap)
+
+                }catch (e:IOException){
+                    e.printStackTrace()
+                    Toast.makeText(this@RegisterActivity,"¡Error!",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        else if(requestCode== CAMARA){
+            bitmap= data!!.extras!!.get("data") as Bitmap
+            imgView.setImageBitmap(bitmap)
+        }
+    }
+
+    private fun getFileExtension(uri: Uri): String {
+        val contentResolver = contentResolver
+        val mime = MimeTypeMap.getSingleton()
+
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri))
     }
 
     private fun verifyEmail(user: FirebaseUser?){

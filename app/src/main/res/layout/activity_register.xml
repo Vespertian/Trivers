@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +11,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="411dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,14 +62,16 @@
                 android:ems="10"
                 android:hint="Contraseña"
                 android:inputType="textPassword" />
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
                 android:layout_gravity="left"
+                android:layout_margin="5dp"
                 android:text="¿Qué rango de edad buscas?"
                 android:textSize="18sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -94,6 +97,7 @@
                     android:hint="Máximo"
                     android:inputType="number" />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
@@ -101,14 +105,40 @@
                 android:layout_margin="5dp"
                 android:text="Proporciona una descripción pública:"
                 android:textSize="18sp" />
+
             <EditText
                 android:id="@+id/editText_Description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:layout_marginVertical="5dp"
-                android:inputType="textAutoCorrect"
-                android:hint="Máximo XXX palabras" />
+                android:ems="10"
+                android:hint="Máximo XXX palabras"
+                android:inputType="textAutoCorrect" />
+
+            <Button
+                android:id="@+id/btnChoose"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Escoger Foto" />
+
+            <LinearLayout
+                android:id="@+id/layout_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/common_full_open_on_phone" />
+
         </LinearLayout>
     </ScrollView>
 
