@@ -1,45 +1,26 @@
 package com.art3mis.trivers
 
-import android.content.ClipDescription
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
-import android.widget.*
+import android.widget.EditText
+import android.widget.ProgressBar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import org.jetbrains.anko.alert
-import java.io.IOException
-import android.widget.EditText
-import android.widget.ProgressBar
-import org.jetbrains.anko.alert
-
-import android.net.Uri
-import android.text.TextUtils
-import android.util.Log
-import android.webkit.MimeTypeMap
-import android.widget.*
-
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-
-import java.io.ByteArrayOutputStream
-import java.io.FileNotFoundException
-import java.io.InputStream
 
 
 class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var editText_Name: EditText
     private lateinit var editText_LastName: EditText
     private lateinit var editText_Age: EditText
+    private lateinit var editText_PhoneNumber: EditText
     private lateinit var editText_EmailR: EditText
     private lateinit var editText_PasswordR: EditText
     private lateinit var editText_RangoMinimo: EditText
@@ -53,6 +34,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var name: String
     private lateinit var lastName: String
     private lateinit var age: String
+    private lateinit var phoneNumber: String
     private lateinit var email: String
     private lateinit var password: String
     private lateinit var rangoMinimo: String
@@ -76,6 +58,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         editText_Name = findViewById(R.id.editText_Name)
         editText_LastName = findViewById(R.id.editText_LastName)
         editText_Age = findViewById(R.id.editText_Age)
+        editText_PhoneNumber = findViewById(R.id.editText_PhoneNumber)
         editText_EmailR = findViewById(R.id.editText_EmailR)
         editText_PasswordR = findViewById(R.id.editText_PasswordR)
         editText_RangoMinimo = findViewById(R.id.editText_RangoMinimo)
@@ -84,6 +67,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         editText_Name.addTextChangedListener(this)
         editText_LastName.addTextChangedListener(this)
         editText_Age.addTextChangedListener(this)
+        editText_PhoneNumber.addTextChangedListener(this)
         editText_EmailR.addTextChangedListener(this)
         editText_PasswordR.addTextChangedListener(this)
         editText_RangoMinimo.addTextChangedListener(this)
@@ -95,11 +79,12 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
 //        imageReference = FirebaseStorage.getInstance().reference.child("images")
-//        dbreference = database.reference.child("User")
+        dbreference = database.reference.child("User")
 
         name = ""
         lastName = ""
         age = ""
+        phoneNumber = ""
         email = ""
         password = ""
         rangoMinimo = ""
@@ -119,6 +104,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         name = editText_Name.text.toString()
         lastName = editText_LastName.text.toString()
         age = editText_Age.text.toString()
+        phoneNumber = editText_PhoneNumber.text.toString()
         email = editText_EmailR.text.toString()
         password = editText_PasswordR.text.toString()
         rangoMinimo = editText_RangoMinimo.text.toString()
@@ -134,6 +120,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         name = ""
         lastName = ""
         age = ""
+        phoneNumber = ""
         email = ""
         password = ""
         rangoMinimo = ""
@@ -167,7 +154,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                             val user:FirebaseUser? = auth.currentUser
                             verifyEmail(user)
 
-                            information().registerInformation(user!!, name, lastName, age, rangoMinimo, rangoMaximo, description)
+                            information().registerInformation(user!!, name, lastName, age, phoneNumber, rangoMinimo, rangoMaximo, description)
 
                             /*if(fileURI!=null){
                                 val nombreImg=user!!.toString()+"pFoto"
