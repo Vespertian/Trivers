@@ -58,14 +58,14 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var rangoMinimo: String
     private lateinit var rangoMaximo: String
     private lateinit var description: String
-    private lateinit var btnChoose: Button
+/*    private lateinit var btnChoose: Button
     private lateinit var imgView: ImageView
     private val GALLERY =1
     private val CAMARA =2
     private var fileURI:Uri? =null
     private var bitmap: Bitmap? = null
     private var imageReference: StorageReference? = null
-    private val TAG = "RegisterActivity"
+    private val TAG = "RegisterActivity"*/
 
 
 
@@ -94,8 +94,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
 
         database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
-        imageReference = FirebaseStorage.getInstance().reference.child("images")
-        dbreference = database.reference.child("User")
+//        imageReference = FirebaseStorage.getInstance().reference.child("images")
+//        dbreference = database.reference.child("User")
 
         name = ""
         lastName = ""
@@ -105,9 +105,9 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         rangoMinimo = ""
         rangoMaximo = ""
         description = ""
-        btnChoose =findViewById(R.id.btnChoose)
+        /*btnChoose =findViewById(R.id.btnChoose)
         imgView=findViewById(R.id.imageView)
-        btnChoose!!.setOnClickListener{mostrarImgs()}
+        btnChoose!!.setOnClickListener{mostrarImgs()}*/
 
     }
 
@@ -169,7 +169,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
 
                             information().registerInformation(user!!, name, lastName, age, rangoMinimo, rangoMaximo, description)
 
-                            if(fileURI!=null){
+                            /*if(fileURI!=null){
                                 val nombreImg=user!!.toString()+"pFoto"
                                 val baos =ByteArrayOutputStream()
                                 bitmap!!.compress(Bitmap.CompressFormat.JPEG,50,baos)
@@ -186,7 +186,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                             Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
                                         }
 
-                            }
+                            }*/
 
                             alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
                                 title("Registro completado")
@@ -215,7 +215,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
-    private fun mostrarImgs() {
+ /*   private fun mostrarImgs() {
         val pDialog = AlertDialog.Builder(this)
         pDialog.setTitle("Seleccionar")
         val pDialogItem= arrayOf("Galería","Camara")
@@ -264,7 +264,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         val mime = MimeTypeMap.getSingleton()
 
         return mime.getExtensionFromMimeType(contentResolver.getType(uri))
-    }
+    }*/
 
     private fun verifyEmail(user: FirebaseUser?){
         user?.sendEmailVerification()?.addOnCompleteListener(this){
