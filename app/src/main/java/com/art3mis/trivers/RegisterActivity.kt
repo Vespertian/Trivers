@@ -1,5 +1,6 @@
 package com.art3mis.trivers
 
+//import android.support.v7.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -7,7 +8,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -17,6 +20,8 @@ import org.jetbrains.anko.alert
 
 
 class RegisterActivity : AppCompatActivity(), TextWatcher {
+
+
     private lateinit var editText_Name: EditText
     private lateinit var editText_LastName: EditText
     private lateinit var editText_Age: EditText
@@ -30,7 +35,6 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var dbreference: DatabaseReference
     private lateinit var database: FirebaseDatabase
     private lateinit var auth: FirebaseAuth
-
     private lateinit var name: String
     private lateinit var lastName: String
     private lateinit var age: String
@@ -40,11 +44,12 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var rangoMinimo: String
     private lateinit var rangoMaximo: String
     private lateinit var description: String
-/*    private lateinit var btnChoose: Button
+    private lateinit var btnGaleria: Button
+    private lateinit var btnCamara:Button
     private lateinit var imgView: ImageView
-    private val GALLERY =1
+/*    private val GALLERY =1
     private val CAMARA =2
-    private var fileURI:Uri? =null
+    private var fileURI: Uri? =null
     private var bitmap: Bitmap? = null
     private var imageReference: StorageReference? = null
     private val TAG = "RegisterActivity"*/
@@ -78,7 +83,9 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
 
         database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
-//        imageReference = FirebaseStorage.getInstance().reference.child("images")
+
+
+
         dbreference = database.reference.child("User")
 
         name = ""
@@ -90,11 +97,20 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         rangoMinimo = ""
         rangoMaximo = ""
         description = ""
-        /*btnChoose =findViewById(R.id.btnChoose)
+/*        btnGaleria =findViewById(R.id.btnGaleria)
+//        btnCamara =findViewById(R.id.btnCamara)
         imgView=findViewById(R.id.imageView)
-        btnChoose!!.setOnClickListener{mostrarImgs()}*/
+        btnGaleria.setOnClickListener(this)*/
 
     }
+
+/*    override fun onClick(view: View?) {
+        val i= view!!.id
+        when(i){
+            R.id.btnGaleria -> escogerImg()
+//            R.id.btnCamara -> tomarImg()
+        }
+    }*/
 
     fun register(view: View){
         createNewAccount()
@@ -154,11 +170,17 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                             val user:FirebaseUser? = auth.currentUser
                             verifyEmail(user)
 
+                            alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
+                                title("Registro completado")
+                                okButton {actionLoginActivity()}
+                            }.show()
+
                             information().registerInformation(user!!, name, lastName, age, phoneNumber, rangoMinimo, rangoMaximo, description)
 
                             /*if(fileURI!=null){
-                                val nombreImg=user!!.toString()+"pFoto"
-                                val baos =ByteArrayOutputStream()
+                                imageReference = FirebaseStorage.getInstance().reference.child("imagenes")
+                                val nombreImg=user.toString()+"pFoto"
+                                val baos = ByteArrayOutputStream()
                                 bitmap!!.compress(Bitmap.CompressFormat.JPEG,50,baos)
                                 val data:ByteArray=baos.toByteArray()
 
@@ -174,11 +196,6 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                         }
 
                             }*/
-
-                            alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
-                                title("Registro completado")
-                                okButton {actionLoginActivity()}
-                            }.show()
                         } else{
                             alert("No se pudo crear la cuenta") {
                                 title("Error")
@@ -202,20 +219,25 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
- /*   private fun mostrarImgs() {
-        val pDialog = AlertDialog.Builder(this)
+    /*fun mostrarImgs() {
+        val intent = Intent()
+        intent.type ="image"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent,"Select Image"),GALLERY)
+        Toast.makeText(this,"please?",Toast.LENGTH_SHORT).show()
+        val pDialog =AlertDialog.Builder(this)
         pDialog.setTitle("Seleccionar")
         val pDialogItem= arrayOf("Galería","Camara")
-        pDialog.setItems(pDialogItem){
-            dialog, which -> when(which){
-            0 ->escogerImg()
-            1 ->tomarImg()
+        pDialog.setItems(pDialogItem)
+            {dialog, which ->
+            when(which){
+                0 ->escogerImg()
+                1 ->tomarImg()
+            }
         }
+    }*/
 
-        }
-    }
-
-    private fun tomarImg() {
+    /*private fun tomarImg() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intent,CAMARA)
     }
@@ -234,7 +256,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                     bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,fileURI)
                     imgView.setImageBitmap(bitmap)
 
-                }catch (e:IOException){
+                }catch (e: IOException){
                     e.printStackTrace()
                     Toast.makeText(this@RegisterActivity,"¡Error!",Toast.LENGTH_SHORT).show()
                 }
@@ -251,8 +273,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         val mime = MimeTypeMap.getSingleton()
 
         return mime.getExtensionFromMimeType(contentResolver.getType(uri))
-    }*/
-
+    }
+*/
     private fun verifyEmail(user: FirebaseUser?){
         user?.sendEmailVerification()?.addOnCompleteListener(this){
             task ->

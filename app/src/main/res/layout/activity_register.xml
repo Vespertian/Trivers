@@ -124,23 +124,37 @@
                 android:hint="Máximo XXX palabras"
                 android:inputType="textAutoCorrect" />
 
-            <Button
-                android:id="@+id/btnChoose"
-                style="@style/Widget.AppCompat.Button.Borderless"
+            <TextView
+                android:id="@+id/textviewFotos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Escoger Foto" />
-
+                android:layout_margin="5dp"
+                android:text="Escoger una foto"
+                android:textSize="18sp" />
             <LinearLayout
-                android:id="@+id/layout_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_height="40dp"
+                android:layout_marginVertical="5dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btnGaleria"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
 
+                    android:text="Galerìa"/>
+                <!--<Button-->
+                    <!--android:id="@+id/btnCamara"-->
+                    <!--style="@style/Widget.AppCompat.Button.Borderless"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="Camara"/>-->
             </LinearLayout>
+
+
 
             <ImageView
                 android:id="@+id/imageView"
