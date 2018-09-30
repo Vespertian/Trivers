@@ -64,8 +64,6 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
                     if (auth.currentUser!!.isEmailVerified){
                         progessBarL.visibility = View.INVISIBLE
                         action_PrivateProfile()
-                        //intent.putExtra("Correo", email)
-                        //intent.putExtra("Contraseña", password)
                     } else{
                         alert("Hemos enviado un correo a tu email, por favor verifícalo ") {
                             title("Error al iniciar sesión")
@@ -89,7 +87,10 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
     }
 
     private fun action_PrivateProfile(){
-        startActivity(Intent(this, PrivateProfileActivity::class.java))
+        val intent = Intent(this, PrivateProfileActivity::class.java)
+        intent.putExtra("Cr", email)
+        intent.putExtra("Ct", password)
+        startActivity(intent)
     }
 
     fun ForgotPassword(view: View){

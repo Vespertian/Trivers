@@ -195,9 +195,9 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                         .addOnFailureListener { exception ->
                                             Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
                                         }
-                                information().registerInformation(user!!, name, lastName, age, phoneNumber,email, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension())
+                                information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension())
                             }else {
-                                information().registerInformation(user!!, name, lastName, age, phoneNumber, email, rangoMinimo, rangoMaximo, description)
+                                information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description)
                             }
                         } else{
                             alert("No se pudo crear la cuenta") {

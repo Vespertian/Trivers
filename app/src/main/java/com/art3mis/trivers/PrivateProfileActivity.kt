@@ -7,15 +7,13 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 open class PrivateProfileActivity : AppCompatActivity() {
-    lateinit var authP: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_private_profile)
-        /*authP = FirebaseAuth.getInstance()
         val objectIntent: Intent = intent
         var emailP = objectIntent.getStringExtra("Cr")
         var passwordP = objectIntent.getStringExtra("Ct")
-        information().getUserInformation(emailP, passwordP, authP)*/
+        information().getUserInformation(emailP, passwordP)
     }
 }
