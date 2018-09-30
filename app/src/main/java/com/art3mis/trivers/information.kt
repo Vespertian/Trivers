@@ -11,12 +11,37 @@ open class information: AppCompatActivity() {
     private lateinit var userID: String
     private lateinit var userInformation: String
 
-    fun registerInformation(user: FirebaseUser, name: String, lastName: String, age: String, phoneNumber: String, rangoMinimo: String, rangoMaximo: String, description: String){
+    fun registerInformation(user: FirebaseUser, name: String, lastName: String,email:String, age: String, phoneNumber: String, rangoMinimo: String, rangoMaximo: String, description: String,fPerfil:String){
         dbreference = FirebaseDatabase.getInstance().getReference("Users")
         val arrayList = arrayListOf<String>()
         arrayList.add(name)
         arrayList.add(lastName)
         arrayList.add(age)
+        arrayList.add(email)
+        arrayList.add(phoneNumber)
+        arrayList.add(rangoMinimo)
+        arrayList.add(rangoMaximo)
+        arrayList.add(description)
+        arrayList.add(fPerfil)
+        dbreference.child(user!!.uid).setValue(arrayList).addOnCompleteListener(this) {
+            task ->
+
+            if (!task.isComplete){
+                alert("No se ha podido crear tu cuenta") {
+                    title("Error de registro")
+                    okButton {}
+                }.show()
+            }
+        }
+    }
+
+    fun registerInformation(user: FirebaseUser, name: String, lastName: String,email:String, age: String, phoneNumber: String, rangoMinimo: String, rangoMaximo: String, description: String){
+        dbreference = FirebaseDatabase.getInstance().getReference("Users")
+        val arrayList = arrayListOf<String>()
+        arrayList.add(name)
+        arrayList.add(lastName)
+        arrayList.add(age)
+        arrayList.add(email)
         arrayList.add(phoneNumber)
         arrayList.add(rangoMinimo)
         arrayList.add(rangoMaximo)
