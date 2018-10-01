@@ -26,6 +26,7 @@ class ForgotPassActivity : AppCompatActivity(), TextWatcher {
         EditText_emailFP.addTextChangedListener(this)
         auth = FirebaseAuth.getInstance()
         progessBarFP = findViewById(R.id.progressBarFP)
+        emailFP = ""
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -33,7 +34,7 @@ class ForgotPassActivity : AppCompatActivity(), TextWatcher {
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+        emailFP = ""
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -42,12 +43,15 @@ class ForgotPassActivity : AppCompatActivity(), TextWatcher {
 
     fun sendFP(view: View){
         if (!emailFP.isEmpty()){
+            progessBarFP.visibility = View.VISIBLE
             auth.sendPasswordResetEmail(emailFP).addOnCompleteListener(this){
                 task ->
 
                 if(task.isSuccessful){
-                    progessBarFP.visibility = View.VISIBLE
-                    toast("Hemos enviado un correo eléctronico a tu Email para continuar con el proceso")
+                    alert("Hemos enviado un correo eléctronico a tu Email para continuar con el proceso") {
+                        title("Email enviado")
+                        yesButton {  }
+                    }.show()
                     startActivity(Intent(this, LoginActivity::class.java))
                 } else{
                     alert("No se pudo enviar el email") {
@@ -55,7 +59,13 @@ class ForgotPassActivity : AppCompatActivity(), TextWatcher {
                         yesButton {  }
                     }.show()
                 }
+                progessBarFP.visibility = View.INVISIBLE
             }
+        } else{
+            alert("Ningún email detectado") {
+                title("Error")
+                yesButton {  }
+            }.show()
         }
     }
 }

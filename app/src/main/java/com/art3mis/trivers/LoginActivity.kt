@@ -8,10 +8,25 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import org.jetbrains.anko.alert
+import com.google.firebase.auth.FirebaseUser
 
-class LoginActivity : AppCompatActivity(), TextWatcher {
+
+
+
+class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnectionFailedListener {
+    override fun onConnectionFailed(p0: ConnectionResult) {
+
+    }
 
     private lateinit var editText_Email: EditText
     private lateinit var editText_Password: EditText
@@ -19,6 +34,8 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
     private lateinit var auth: FirebaseAuth
     private lateinit var password: String
     private lateinit var email: String
+    private lateinit var mGoogleApiClient: GoogleApiClient
+    private var RC_SIGN_IN = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +47,58 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
 
         progessBarL = findViewById(R.id.progressBarL)
         auth = FirebaseAuth.getInstance()
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.WEB_CLIENT_ID))
+                .requestEmail()
+                .build()
+
+        mGoogleApiClient = GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build()
+    }
+
+    fun google_login(view: View){
+        signIn()
+    }
+
+    private fun signIn() {
+        val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account)
+            } catch (e: ApiException) {
+
+            }
+
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        val user = auth.currentUser
+                        alert("Usuario ${user!!.email} ${user!!.phoneNumber} ${user!!.displayName}") {
+                            title("Completado")
+                            okButton {action_Information()}
+                        }.show()
+                    } else {
+
+                    }
+                }
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -37,7 +106,8 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+        email = ""
+        password = ""
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -56,24 +126,51 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
     private fun loginUser(){
         if (!email.isEmpty()&&!password.isEmpty()){
             progessBarL.visibility = View.VISIBLE
-
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this){
                 task ->
 
                 if(task.isSuccessful){
-                    action()
+                    if (auth.currentUser!!.isEmailVerified){
+                        progessBarL.visibility = View.INVISIBLE
+                        action_PrivateProfile()
+                    } else{
+                        alert("Hemos enviado un correo a tu email, por favor verifícalo ") {
+                            title("Error al iniciar sesión")
+                            yesButton {  }
+                        }.show()
+                    }
                 } else{
                     alert("Correo electrónico o contraseña no válidos") {
                         title("Error al iniciar sesión")
                         yesButton {  }
                     }.show()
                 }
+                progessBarL.visibility = View.INVISIBLE
             }
+        } else{
+            alert("Correo electrónico o contraseña no válidos") {
+                title("Error al iniciar sesión")
+                yesButton {  }
+            }.show()
         }
     }
 
-    private fun action(){
-        startActivity(Intent(this, PrivateProfileActivity::class.java))
+    fun action_PrivateProfile(){
+        val intent = Intent(this, PrivateProfileActivity::class.java)
+        intent.putExtra("Cr", email)
+        intent.putExtra("Ct", password)
+        startActivity(intent)
+    }
+
+    private fun action_Information(){
+        val intent = Intent(this, RegisterActivity::class.java)
+        intent.putExtra("Google_Login", true)
+        if (auth.currentUser!!.phoneNumber != null){
+            intent.putExtra("Phone", true)
+        } else{
+            intent.putExtra("Phone", false)
+        }
+        startActivity(intent)
     }
 
     fun ForgotPassword(view: View){
