@@ -1,6 +1,5 @@
 package com.art3mis.trivers
 
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -14,7 +13,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-
 
 
 open class PrivateProfileActivity : AppCompatActivity() {

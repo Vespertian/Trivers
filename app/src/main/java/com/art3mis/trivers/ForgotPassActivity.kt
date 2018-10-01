@@ -1,8 +1,8 @@
 package com.art3mis.trivers
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -11,7 +11,6 @@ import android.widget.ProgressBar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_forgot_pass.*
 import org.jetbrains.anko.alert
-import org.jetbrains.anko.toast
 
 class ForgotPassActivity : AppCompatActivity(), TextWatcher {
     private lateinit var EditText_emailFP: EditText

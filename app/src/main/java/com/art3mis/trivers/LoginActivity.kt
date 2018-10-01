@@ -18,9 +18,6 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import org.jetbrains.anko.alert
-import com.google.firebase.auth.FirebaseUser
-
-
 
 
 class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnectionFailedListener {
@@ -155,7 +152,7 @@ class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnec
         }
     }
 
-    fun action_PrivateProfile(){
+    private fun action_PrivateProfile(){
         val intent = Intent(this, PrivateProfileActivity::class.java)
         intent.putExtra("Cr", email)
         intent.putExtra("Ct", password)
