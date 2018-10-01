@@ -16,7 +16,7 @@ import com.google.firebase.storage.StorageReference
 
 
 open class PrivateProfileActivity : AppCompatActivity() {
-    private val TAG="PrivateProfileActivity"
+    //private val TAG="PrivateProfileActivity"
     private lateinit var imageReference: StorageReference
     private lateinit var usuario:FirebaseUser
     private lateinit var uAuth:FirebaseAuth
@@ -24,15 +24,12 @@ open class PrivateProfileActivity : AppCompatActivity() {
     private lateinit var dbRef:DatabaseReference
     private lateinit var tNombre:TextView
     private lateinit var imgPerfil:ImageView
-    private lateinit var eNombreC:TextView
     private lateinit var eDescripcion:EditText
     private lateinit var eEmail:EditText
     private lateinit var eEdad:EditText
     private lateinit var eTelefono:EditText
     private lateinit var eRMinimo:EditText
     private lateinit var eRMaximo:EditText
-    private var userInformation: MutableMap<String, Any>? = HashMap()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +38,8 @@ open class PrivateProfileActivity : AppCompatActivity() {
         usuario= uAuth.currentUser!!
         database= FirebaseDatabase.getInstance()
         dbRef=database.getReference("Users").child(usuario.uid)
-//        imageReference=FirebaseStorage.getInstance().reference.child("imagenes/"+dbRef.child("fPerfil").toString())
         tNombre=findViewById(R.id.tNombre)
         imgPerfil=findViewById(R.id.imgPerfil)
-        eNombreC=findViewById(R.id.eNombreC)
         eDescripcion=findViewById(R.id.eDescripcion)
         eEdad=findViewById(R.id.eEdad)
         eEmail=findViewById(R.id.eEmail)
@@ -57,8 +52,11 @@ open class PrivateProfileActivity : AppCompatActivity() {
     private fun actualizar(){
         dbRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dS: DataSnapshot) {
-                tNombre.text=dS.child("name").value.toString()
-                eNombreC.setText(dS.child("name").value.toString()+" "+dS.child("lastName").value.toString())
+                if (dS.child("lastName").value.toString() != "NoLastName"){
+                    tNombre.text = dS.child("name").value.toString()+" "+dS.child("lastName").value.toString()
+                } else{
+                    tNombre.text = dS.child("name").value.toString()
+                }
                 eDescripcion.setText(dS.child("description").value.toString())
                 eEdad.setText(dS.child("age").value.toString())
                 eEmail.setText(dS.child("email").value.toString())

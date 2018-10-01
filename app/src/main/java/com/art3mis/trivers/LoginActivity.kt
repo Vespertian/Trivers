@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.*
 import org.jetbrains.anko.alert
 
 
@@ -32,6 +33,7 @@ class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnec
     private lateinit var password: String
     private lateinit var email: String
     private lateinit var mGoogleApiClient: GoogleApiClient
+    private lateinit var dbreference: DatabaseReference
     private var RC_SIGN_IN = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +65,7 @@ class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnec
     private fun signIn() {
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
         startActivityForResult(signInIntent, RC_SIGN_IN)
+
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
@@ -92,8 +95,6 @@ class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnec
                             title("Completado")
                             okButton {action_Information()}
                         }.show()
-                    } else {
-
                     }
                 }
     }
@@ -154,20 +155,31 @@ class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnec
 
     private fun action_PrivateProfile(){
         val intent = Intent(this, PrivateProfileActivity::class.java)
-        intent.putExtra("Cr", email)
-        intent.putExtra("Ct", password)
         startActivity(intent)
     }
 
     private fun action_Information(){
+        dbreference = FirebaseDatabase.getInstance().getReference("Users").child(auth.currentUser!!.uid)
         val intent = Intent(this, RegisterActivity::class.java)
-        intent.putExtra("Google_Login", true)
-        if (auth.currentUser!!.phoneNumber != null){
-            intent.putExtra("Phone", true)
-        } else{
-            intent.putExtra("Phone", false)
-        }
-        startActivity(intent)
+        dbreference.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(dS: DataSnapshot) {
+                if (dS.child("lastName").value.toString() == "NoLastName") {
+                    action_PrivateProfile()
+                } else {
+                    intent.putExtra("Google_Login", true)
+                    if (auth.currentUser!!.phoneNumber != null) {
+                        intent.putExtra("Phone", true)
+                    } else {
+                        intent.putExtra("Phone", false)
+                    }
+                    startActivity(intent)
+                }
+            }
+        })
     }
 
     fun ForgotPassword(view: View){

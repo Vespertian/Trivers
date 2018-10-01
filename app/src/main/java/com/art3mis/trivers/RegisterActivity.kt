@@ -17,8 +17,7 @@ import android.webkit.MimeTypeMap
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import org.jetbrains.anko.alert
@@ -103,12 +102,12 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         rangoMaximo = ""
         description = ""
 
-        if (intent.getBooleanExtra("Google_Login", false)){
+        if (intent.getBooleanExtra("Google_Login", false)) {
             editText_Name.visibility = View.GONE
             editText_LastName.visibility = View.GONE
-            if (intent.getBooleanExtra("Phone", false)){
+            if (intent.getBooleanExtra("Phone", false)) {
                 editText_PhoneNumber.visibility = View.GONE
-            } else{
+            } else {
                 editText_PhoneNumber.visibility = View.VISIBLE
             }
             editText_EmailR.visibility = View.GONE

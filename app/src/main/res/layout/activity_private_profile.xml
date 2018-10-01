@@ -1,153 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
     android:orientation="vertical"
     tools:context=".PrivateProfileActivity"
     android:gravity="center"
     >
 
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="411dp"
-        android:layout_margin="5dp"
-        >
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/navigation">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="20"
-            >
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <ImageView
                 android:id="@+id/imgPerfil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="3"
-                android:onClick="cambiarImg"
-                />
+                android:onClick="cambiarImg" />
+
             <TextView
                 android:id="@+id/tNombre"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:textSize="25dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="Descripción"
-                android:textSize="20dp" />
-            <EditText
-                android:id="@+id/eDescripcion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:layout_margin="5dp"
-                android:textSize="15dp"
-                android:onClick="cambiarDesc"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="Información Personal"
-                android:textSize="20dp" />
-            <TextView
-                android:id="@+id/eNombreC"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="17dp"
-                android:layout_margin="5dp"
-                />
-            <EditText
-                android:id="@+id/eEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="17dp"
-                android:layout_margin="5dp"
-                android:onClick="cambiarEmail"
-                />
-            <EditText
-                android:id="@+id/eEdad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="17dp"
-                android:layout_margin="5dp"
-                android:onClick="cambiarEdad"
-                />
-            <EditText
-                android:id="@+id/eTelefono"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="17dp"
-                android:layout_margin="5dp"
-                android:onClick="cambiarTelefono"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="Rango de Edades"
-                android:textSize="16dp" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="2"
-                android:weightSum="2">
-                <EditText
-                    android:id="@+id/eRMinimo"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="17dp"
-                    android:layout_margin="10dp"
-                    android:onClick="cambiarRMinimo"
-                    />
-                <EditText
-                    android:id="@+id/eRMaximo"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:layout_margin="10dp"
-                    android:textSize="17dp"
-                    android:onClick="cambiarRMaximo"
-                    />
-            </LinearLayout>
-
+                android:editable="false"
+                android:textSize="25dp" />
         </LinearLayout>
-    </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        android:orientation="vertical">
-        <EditText
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="FUNCIONA!!!"/>
+            tools:layout_editor_absoluteX="5dp"
+            tools:layout_editor_absoluteY="5dp">
 
-        <!--acá van los botones de perfil,trivias y matchups-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="20">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="Descripción"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/eDescripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="4"
+                    android:editable="false"
+                    android:onClick="cambiarDesc"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="Información Personal"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/eEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:editable="false"
+                    android:onClick="cambiarEmail"
+                    android:textSize="17dp" />
+
+                <EditText
+                    android:id="@+id/eEdad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:editable="false"
+                    android:onClick="cambiarEdad"
+                    android:textSize="17dp" />
+
+                <EditText
+                    android:id="@+id/eTelefono"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:editable="false"
+                    android:onClick="cambiarTelefono"
+                    android:textSize="17dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="Rango de Edades"
+                    android:textSize="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <EditText
+                        android:id="@+id/eRMinimo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:editable="false"
+                        android:onClick="cambiarRMinimo"
+                        android:textSize="17dp" />
+
+                    <EditText
+                        android:id="@+id/eRMaximo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:editable="false"
+                        android:onClick="cambiarRMaximo"
+                        android:textSize="17dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
-</LinearLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        app:itemBackground="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/navigation" />
+</android.support.constraint.ConstraintLayout>
