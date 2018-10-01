@@ -102,6 +102,18 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         rangoMinimo = ""
         rangoMaximo = ""
         description = ""
+
+        if (intent.getBooleanExtra("Google_Login", false)){
+            editText_Name.visibility = View.INVISIBLE
+            editText_LastName.visibility = View.INVISIBLE
+            if (intent.getBooleanExtra("Phone", false)){
+                editText_PhoneNumber.visibility = View.INVISIBLE
+            } else{
+                editText_PhoneNumber.visibility = View.VISIBLE
+            }
+            editText_EmailR.visibility = View.INVISIBLE
+            editText_PasswordR.visibility = View.INVISIBLE
+        }
     }
 
     fun register(view: View){
@@ -156,70 +168,126 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     }
 
     private fun createNewAccount(){
-        if (!name.isEmpty()&&!lastName.isEmpty()&&!age.isEmpty()&&!email.isEmpty()&&!password.isEmpty()&&!rangoMinimo.isEmpty()&&!rangoMaximo.isEmpty()&&!description.isEmpty()){
-            if(age.toInt()<18){
-                alert("Por favor no sigas intentando") {
-                    title("Error")
-                    okButton {actionLoginActivity()}
-                }.show()
-            } else{
-                if (validateEmail(email)&&validatePassword(password)){
-                    progessBar.visibility = View.VISIBLE
-                    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this){
-                        task ->
+        if (intent.getBooleanExtra("Google_Login", false)){
+            val user = auth.currentUser
+            val nombreImg= user!!.email+"_pFoto"
+            if (intent.getBooleanExtra("Phone", false)){
+                phoneNumber = user.phoneNumber.toString()
+            }
+            if(fileUri!=null){
+                imageReference = FirebaseStorage.getInstance().reference.child("imagenes")
 
-                        if (task.isComplete){
-                            val user:FirebaseUser? = auth.currentUser
-                            verifyEmail(user)
+                val baos = ByteArrayOutputStream()
+                bitmap!!.compress(Bitmap.CompressFormat.JPEG,50,baos)
+                val data:ByteArray=baos.toByteArray()
 
-                            alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
-                                title("Registro completado")
-                                okButton {actionLoginActivity()}
-                            }.show()
-
-                            val nombreImg= user!!.email.toString()+"_pFoto"
-                            if(fileUri!=null){
-                                imageReference = FirebaseStorage.getInstance().reference.child("imagenes")
-
-                                val baos = ByteArrayOutputStream()
-                                bitmap!!.compress(Bitmap.CompressFormat.JPEG,50,baos)
-                                val data:ByteArray=baos.toByteArray()
-
-                                val fileRef = imageReference!!.child(nombreImg + "." + extension())
-                                fileRef.putBytes(data)
-                                        .addOnSuccessListener { taskSnapshot ->
-//                                            Log.e(TAG, "Uri: " + taskSnapshot.downloadUrl)
-                                            Log.e(TAG, "Name: " + taskSnapshot.metadata!!.name)
-                                            Toast.makeText(this, "File Uploaded ", Toast.LENGTH_LONG).show()
-                                        }
-                                        .addOnFailureListener { exception ->
-                                            Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
-                                        }
-                                information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension())
-                            }else {
-                                information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description)
-                            }
-                        } else{
-                            alert("No se pudo crear la cuenta") {
-                                title("Error")
-                                okButton {}
-                            }.show()
+                val fileRef = imageReference!!.child(nombreImg + "." + extension())
+                fileRef.putBytes(data)
+                        .addOnSuccessListener { taskSnapshot ->
+                            //                                            Log.e(TAG, "Uri: " + taskSnapshot.downloadUrl)
+                            Log.e(TAG, "Name: " + taskSnapshot.metadata!!.name)
+                            Toast.makeText(this, "File Uploaded ", Toast.LENGTH_LONG).show()
                         }
-                        progessBar.visibility = View.INVISIBLE
-                    }
-                } else if(!validateEmail(email)){
-                    alert("Correo electrónico no válido") {
-                        title("Error de Email")
-                        yesButton {  }
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
+                        }
+                if(age.toInt()<18){
+                    alert("Por favor no sigas intentando") {
+                        title("Error")
+                        okButton {actionLoginActivity()}
+                    }.show()
+                } else{
+                    information().registerInformation(user, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension())
+                    alert {
+                        title("Registro completado")
+                        okButton {action_PrivateProfile()}
+                    }.show()
+                }
+            }else {
+                if(age.toInt()<18){
+                    alert("Por favor no sigas intentando") {
+                        title("Error")
+                        okButton {actionLoginActivity()}
+                    }.show()
+                } else{
+                    information().registerInformation(user, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description)
+                    alert {
+                        title("Registro completado")
+                        okButton {action_PrivateProfile()}
                     }.show()
                 }
             }
-        } else {
-            alert("Por favor ingresa todos los datos para poder continuar") {
-                title("Datos incompletos")
-                yesButton {}
-            }.show()
+        } else{
+            if (!name.isEmpty()&&!lastName.isEmpty()&&!age.isEmpty()&&!email.isEmpty()&&!password.isEmpty()&&!rangoMinimo.isEmpty()&&!rangoMaximo.isEmpty()&&!description.isEmpty()){
+                if(age.toInt()<18){
+                    alert("Por favor no sigas intentando") {
+                        title("Error")
+                        okButton {actionLoginActivity()}
+                    }.show()
+                } else{
+                    if (validateEmail(email)&&validatePassword(password)){
+                        progessBar.visibility = View.VISIBLE
+                        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this){
+                            task ->
+
+                            if (task.isComplete){
+                                val user:FirebaseUser? = auth.currentUser
+                                verifyEmail(user)
+
+                                alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
+                                    title("Registro completado")
+                                    okButton {actionLoginActivity()}
+                                }.show()
+
+                                val nombreImg= user!!.email.toString()+"_pFoto"
+                                if(fileUri!=null){
+                                    imageReference = FirebaseStorage.getInstance().reference.child("imagenes")
+
+                                    val baos = ByteArrayOutputStream()
+                                    bitmap!!.compress(Bitmap.CompressFormat.JPEG,50,baos)
+                                    val data:ByteArray=baos.toByteArray()
+
+                                    val fileRef = imageReference!!.child(nombreImg + "." + extension())
+                                    fileRef.putBytes(data)
+                                            .addOnSuccessListener { taskSnapshot ->
+                                                //                                            Log.e(TAG, "Uri: " + taskSnapshot.downloadUrl)
+                                                Log.e(TAG, "Name: " + taskSnapshot.metadata!!.name)
+                                                Toast.makeText(this, "File Uploaded ", Toast.LENGTH_LONG).show()
+                                            }
+                                            .addOnFailureListener { exception ->
+                                                Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
+                                            }
+                                    information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension())
+                                }else {
+                                    information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description)
+                                }
+                            } else{
+                                alert("No se pudo crear la cuenta") {
+                                    title("Error")
+                                    okButton {}
+                                }.show()
+                            }
+                            progessBar.visibility = View.INVISIBLE
+                        }
+                    } else if(!validateEmail(email)){
+                        alert("Correo electrónico no válido") {
+                            title("Error de Email")
+                            yesButton {  }
+                        }.show()
+                    }
+                }
+            } else {
+                alert("Por favor ingresa todos los datos para poder continuar") {
+                    title("Datos incompletos")
+                    yesButton {}
+                }.show()
+            }
         }
+
+    }
+
+    fun action_PrivateProfile(){
+        startActivity(Intent(this, PrivateProfileActivity::class.java))
     }
 
     fun escoger(view: View){

@@ -11,9 +11,9 @@ open class PrivateProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_private_profile)
-        val objectIntent: Intent = intent
+        /*val objectIntent: Intent = intent
         var emailP = objectIntent.getStringExtra("Cr")
         var passwordP = objectIntent.getStringExtra("Ct")
-        information().getUserInformation(emailP, passwordP)
+        information().getUserInformation(emailP, passwordP)*/
     }
 }
