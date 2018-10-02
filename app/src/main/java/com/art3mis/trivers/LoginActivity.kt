@@ -91,8 +91,8 @@ class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnec
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser
-                        alert("Usuario ${user!!.email} ${user!!.phoneNumber} ${user!!.displayName}") {
-                            title("Completado")
+                        alert("Inició con el correo: ${user!!.email}") {
+                            title("Iniciando sesión...")
                             okButton {action_Information()}
                         }.show()
                     }

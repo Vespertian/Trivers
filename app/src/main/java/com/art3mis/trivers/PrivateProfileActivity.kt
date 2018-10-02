@@ -3,6 +3,7 @@ package com.art3mis.trivers
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -13,6 +14,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.activity_private_profile.view.*
+import org.jetbrains.anko.alert
 
 
 open class PrivateProfileActivity : AppCompatActivity() {
@@ -24,12 +27,12 @@ open class PrivateProfileActivity : AppCompatActivity() {
     private lateinit var dbRef:DatabaseReference
     private lateinit var tNombre:TextView
     private lateinit var imgPerfil:ImageView
-    private lateinit var eDescripcion:EditText
-    private lateinit var eEmail:EditText
-    private lateinit var eEdad:EditText
-    private lateinit var eTelefono:EditText
-    private lateinit var eRMinimo:EditText
-    private lateinit var eRMaximo:EditText
+    private lateinit var eDescripcion:TextView
+    private lateinit var eEmail:TextView
+    private lateinit var eEdad:TextView
+    private lateinit var eTelefono:TextView
+    private lateinit var eRMinimo:TextView
+    private lateinit var eRMaximo:TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +47,8 @@ open class PrivateProfileActivity : AppCompatActivity() {
         eEdad=findViewById(R.id.eEdad)
         eEmail=findViewById(R.id.eEmail)
         eTelefono=findViewById(R.id.eTelefono)
-        eRMinimo=findViewById(R.id.eRMaximo)
-        eRMaximo=findViewById(R.id.eRMinimo)
+        eRMinimo=findViewById(R.id.eRMinimo)
+        eRMaximo=findViewById(R.id.eRMaximo)
         actualizar()
     }
 
@@ -57,12 +60,12 @@ open class PrivateProfileActivity : AppCompatActivity() {
                 } else{
                     tNombre.text = dS.child("name").value.toString()
                 }
-                eDescripcion.setText(dS.child("description").value.toString())
-                eEdad.setText(dS.child("age").value.toString())
-                eEmail.setText(dS.child("email").value.toString())
-                eTelefono.setText(dS.child("phoneNumber").value.toString())
-                eRMinimo.setText(dS.child("rangoMinimo").value.toString())
-                eRMaximo.setText(dS.child("rangoMaximo").value.toString())
+                eDescripcion.text = dS.child("description").value.toString()
+                eEdad.text = dS.child("age").value.toString()
+                eEmail.text = dS.child("email").value.toString()
+                eTelefono.text = dS.child("phoneNumber").value.toString()
+                eRMinimo.text = dS.child("rangoMinimo").value.toString()
+                eRMaximo.text = dS.child("rangoMaximo").value.toString()
                 imageReference=FirebaseStorage.getInstance().reference.child("imagenes/"+dS.child("fPerfi").value.toString())
 
                 if(imageReference.toString()!=" "){
@@ -81,54 +84,6 @@ open class PrivateProfileActivity : AppCompatActivity() {
 
             }
         })
-
-    }
-
-    fun cambiarEmail(view: View){
-        cambiarEmail()
-    }
-    private fun cambiarEmail(){
-
-    }
-
-    fun cambiarEdad(view: View){
-        cambiarEdad()
-    }
-    private fun cambiarEdad(){
-
-    }
-
-    fun cambiarDesc(view: View){
-        cambiarDesc()
-    }
-    private fun cambiarDesc(){
-
-    }
-
-    fun cambiarTelefono(view: View){
-        cambiarTelefono()
-    }
-    private fun cambiarTelefono(){
-
-    }
-
-    fun cambiarRMinimo(view: View){
-        cambiarRMinimo()
-    }
-    private fun cambiarRMinimo(){
-
-    }
-
-    fun cambiarRMaximo(view: View){
-        cambiarRMaximo()
-    }
-    private fun cambiarRMaximo(){
-
-    }
-     fun cambiarImg(view:View){
-        CambiarImagen()
-    }
-    private fun CambiarImagen(){
 
     }
 }

@@ -26,12 +26,13 @@
                 android:text="Selecciona una foto"
                 android:textSize="18sp" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="escoger"
-                app:srcCompat="@android:drawable/ic_menu_camera" />
+                android:src="@android:drawable/ic_menu_camera"
+                tools:srcCompat="@tools:sample/avatars[7]" />
 
             <EditText
                 android:id="@+id/editText_Name"
@@ -136,7 +137,7 @@
                 android:layout_marginVertical="5dp"
                 android:ems="10"
                 android:hint="Máximo XXX palabras"
-                android:inputType="textAutoCorrect" />
+                android:inputType="textAutoCorrect|textMultiLine" />
 
 
         </LinearLayout>
