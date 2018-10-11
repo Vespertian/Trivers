@@ -181,6 +181,12 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                     if (intent.getBooleanExtra("Phone", false)){
                         phoneNumber = user.phoneNumber.toString()
                     }
+                    if(rangoMinimo.toInt()<18){
+                        rangoMinimo="18"
+                    }
+                    if(rangoMaximo.toInt()<18){
+                        rangoMaximo="18"
+                    }
                     if(fileUri!=null){
                         imageReference = FirebaseStorage.getInstance().reference.child("imagenes")
 
@@ -193,7 +199,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                 .addOnSuccessListener { taskSnapshot ->
                                     //                                            Log.e(TAG, "Uri: " + taskSnapshot.downloadUrl)
                                     Log.e(TAG, "Name: " + taskSnapshot.metadata!!.name)
-                                    Toast.makeText(this, "File Uploaded ", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this, "File Uploaded", Toast.LENGTH_LONG).show()
                                 }
                                 .addOnFailureListener { exception ->
                                     Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
@@ -239,6 +245,12 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                     title("Registro completado")
                                     okButton {actionLoginActivity()}
                                 }.show()
+                                if(rangoMinimo.toInt()<18){
+                                    rangoMinimo="18"
+                                }
+                                if(rangoMaximo.toInt()<18){
+                                    rangoMaximo="18"
+                                }
 
                                 val nombreImg= user!!.email.toString()+"_pFoto"
                                 if(fileUri!=null){
@@ -311,8 +323,9 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         pDialog.create().show()
     }
     private fun tomarImg() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent,CAMARA)
+        Toast.makeText(this,"Sin implementar... Próximamente",Toast.LENGTH_SHORT).show()
+        /*val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent,CAMARA)*/
     }
     private fun escogerImg() {
         val galeriaIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -335,8 +348,18 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
             }
         }
         else if(requestCode== CAMARA){
-            bitmap= data!!.extras!!.get("data") as Bitmap
-            imgView.setImageBitmap(bitmap)
+            if (data!=null){//Hay que guardar la imagen y vovler a buscarla para subirla... FALTA TODO ESO.
+                try{
+                    bitmap= data!!.extras!!.get("data") as Bitmap
+                    imgView.setImageBitmap(bitmap)
+                }catch (e: IOException){
+                    e.printStackTrace()
+                    Toast.makeText(this,"¡Error!", Toast.LENGTH_SHORT).show()
+                }
+
+
+            }
+
         }
     }
 

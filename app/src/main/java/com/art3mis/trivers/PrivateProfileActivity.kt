@@ -1,10 +1,16 @@
 package com.art3mis.trivers
 
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
+import android.util.Log
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -14,6 +20,8 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_private_profile.*
 import kotlinx.android.synthetic.main.activity_private_profile.view.*
 import org.jetbrains.anko.alert
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 
 open class PrivateProfileActivity : AppCompatActivity() {
@@ -34,6 +42,9 @@ open class PrivateProfileActivity : AppCompatActivity() {
     private lateinit var eEdadB:Button
     private lateinit var eEdadC:EditText
     private lateinit var eEdadCB:Button
+    private var fileUri: Uri? =null
+    private var bitmap: Bitmap? = null
+    private val GALLERY=1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,25 +64,12 @@ open class PrivateProfileActivity : AppCompatActivity() {
         eEdadB=findViewById(R.id.eEdadB)
         eEdadC=findViewById(R.id.eEdadC)
         eEdadCB=findViewById(R.id.eEdadCB)
-
         actualizar()
     }
 
     private fun actualizar(){
-        dbRef.addValueEventListener(object : ValueEventListener {
+        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dS: DataSnapshot) {
-                if(imageReference.toString()!=" "){
-                    val ONE_MEGABYTE=(1024*1024).toLong()
-                    imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener { bytes ->
-                        val bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
-                        imgPerfil.setImageBitmap(bmp)
-                    }.addOnFailureListener{exception ->
-                        Toast.makeText(this@PrivateProfileActivity,"error",Toast.LENGTH_LONG).show()
-                    }
-                }else{
-                    Toast.makeText(this@PrivateProfileActivity,"No tienes foto de perfil subida",Toast.LENGTH_LONG).show()
-                }
-
                 if (dS.child("lastName").value.toString() != "NoLastName"){
                     tNombre.text = dS.child("name").value.toString()+" "+dS.child("lastName").value.toString()
                 } else{
@@ -85,14 +83,79 @@ open class PrivateProfileActivity : AppCompatActivity() {
                 eTelefono.text = dS.child("phoneNumber").value.toString()
                 eTelefonoC.setText(dS.child("phoneNumber").value.toString())
                 eRMinimo.text = dS.child("rangoMinimo").value.toString()
+                eRMinimoE.setText(dS.child("rangoMinimo").value.toString())
                 eRMaximo.text = dS.child("rangoMaximo").value.toString()
+                eRMaximoE.setText(dS.child("rangoMaximo").value.toString())
                 imageReference=FirebaseStorage.getInstance().reference.child("imagenes/"+dS.child("fPerfi").value.toString())
+                if(imageReference.toString()!=""){
+                    val ONE_MEGABYTE=(1024*1024).toLong()
+                    imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener { bytes ->
+                        val bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
+                        imgPerfil.setImageBitmap(bmp)
+                    }.addOnFailureListener{exception ->
+                        Toast.makeText(this@PrivateProfileActivity,"error",Toast.LENGTH_LONG).show()
+                    }
+                }else{
+                    Toast.makeText(this@PrivateProfileActivity,"No tienes foto de perfil subida",Toast.LENGTH_LONG).show()
+                }
             }
             override fun onCancelled(p0: DatabaseError) {
 
             }
         })
 
+    }
+
+    fun eFoto(view: View){
+        alert("¡Se eliminará la foto actual!") {
+            title("¡Cuidado!")
+            okButton {subirFotoP()}//Sin implementar...
+            noButton()
+        }.show()
+    }
+    private fun subirFotoP(){
+        val galeriaIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(galeriaIntent,GALLERY)
+    }
+
+    public override fun onActivityResult(requestCode:Int, resultCode:Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==GALLERY){
+            if (data!=null){
+                fileUri = data.data
+                try{
+                    bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,fileUri)
+                    imgPerfil.setImageBitmap(bitmap)
+                    subirImg()
+                }catch (e: IOException){
+                    e.printStackTrace()
+                    Toast.makeText(this,"¡Error!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun subirImg(){
+        val baos = ByteArrayOutputStream()
+        bitmap!!.compress(Bitmap.CompressFormat.JPEG,50,baos)
+        val data:ByteArray=baos.toByteArray()
+        imageReference.delete().addOnSuccessListener { aVoid ->
+            actualizar()
+        }
+        val fileRef =  FirebaseStorage.getInstance().reference.child("imagenes").child(eEmail.text.toString()+"_pFoto."+extension())
+        fileRef.putBytes(data)
+                .addOnSuccessListener { taskSnapshot ->
+                    //                                            Log.e(TAG, "Uri: " + taskSnapshot.downloadUrl)
+                    Toast.makeText(this, "File Uploaded ", Toast.LENGTH_LONG).show()
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
+                }
+    }
+    private fun extension():String{
+        val cR=contentResolver
+        val mime = MimeTypeMap.getSingleton()
+        return mime.getExtensionFromMimeType(cR.getType(fileUri))
     }
 
     fun eEdadButton(view: View){
@@ -118,7 +181,11 @@ open class PrivateProfileActivity : AppCompatActivity() {
     }
 
     fun eDescrB(view: View){
-        eDescrB()
+        alert("Desea cambiar su descripcion") {
+            title("Cuidado!")
+            okButton {eDescrB()}
+            noButton()
+        }.show()
     }
     private fun eDescrB(){
         eDescripcion.visibility=View.GONE
@@ -138,6 +205,7 @@ open class PrivateProfileActivity : AppCompatActivity() {
         dbRef.child("description").setValue(eDescripcionC.text.toString())
         actualizar()
     }
+
 
     fun eTelB(view: View){
         eTelB()
@@ -161,4 +229,30 @@ open class PrivateProfileActivity : AppCompatActivity() {
         actualizar()
     }
 
+    fun eREdadesB(view: View){
+        eREdadesB()
+    }
+    private fun eREdadesB(){
+        eRMinimo.visibility=View.GONE
+        eRMaximo.visibility=View.GONE
+        eREdadesB.visibility=View.GONE
+        eRMaximoE.visibility=View.VISIBLE
+        eRMinimoE.visibility=View.VISIBLE
+        eREdadesCB.visibility=View.VISIBLE
+    }
+
+    fun eREdadesCB(view: View){
+        eREdadesCB()
+    }
+    private fun eREdadesCB(){
+        eRMinimo.visibility=View.VISIBLE
+        eRMaximo.visibility=View.VISIBLE
+        eREdadesB.visibility=View.VISIBLE
+        eRMaximoE.visibility=View.GONE
+        eRMinimoE.visibility=View.GONE
+        eREdadesCB.visibility=View.GONE
+        dbRef.child("rangoMinimo").setValue(eRMinimoE.text.toString())
+        dbRef.child("rangoMaximo").setValue(eRMaximoE.text.toString())
+        actualizar()
+    }
 }
