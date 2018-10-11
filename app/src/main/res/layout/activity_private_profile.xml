@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginHorizontal="5dp"
+    android:layout_marginHorizontal="5sp"
     android:layout_marginTop="5dp"
     tools:context=".PrivateProfileActivity"
     android:layout_gravity="top"
@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/navigation">
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        tools:layout_editor_absoluteX="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,16 +26,17 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgPerfil"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center_horizontal" />
+                android:layout_width="200sp"
+                android:layout_height="200sp"
+                android:layout_gravity="center_horizontal"
+                android:onClick="eFoto"/>
 
             <TextView
                 android:id="@+id/tNombre"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
-                android:layout_margin="5dp"
+                android:layout_margin="5sp"
                 android:textAllCaps="true"
                 android:textSize="25dp" />
         </LinearLayout>
@@ -48,49 +50,69 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Descripción"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5sp"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="320sp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Descripción"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        />
+
+                    <Button
+                        android:id="@+id/eDescripcionB"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:background="@android:drawable/ic_menu_edit"
+                        android:onClick="eDescrB" />
+                    <Button
+                        android:id="@+id/eDescripcionCB"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:background="@android:drawable/ic_menu_save"
+                        android:onClick="eDescrCB"
+                        android:visibility="gone" />
+                    <Button
+                        android:id="@+id/cDescripcionB"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:background="@android:drawable/ic_delete"
+                        android:visibility="gone"
+                        android:onClick="cDescripcionB"/>
+
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/eDescripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="20sp" />
-                <Button
-                    android:id="@+id/eDescripcionB"
-                    style="@style/Widget.AppCompat.Button.Small"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@android:drawable/ic_menu_edit"
-                    android:onClick="eDescrB"/>
+
                 <EditText
                     android:id="@+id/eDescripcionC"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:inputType="textMultiLine"
-                    />
-                <Button
-                    android:id="@+id/eDescripcionCB"
-                    style="@style/Widget.AppCompat.Button.Small"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:visibility="gone"
-                    android:background="@android:drawable/ic_menu_edit"
-                    android:onClick="eDescrCB"/>
+                    android:visibility="gone" />
+
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="Información Personal"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -99,8 +121,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="70dp"
+                        android:layout_width="70sp"
                         android:layout_height="wrap_content"
                         android:text="Correo"
                         android:textSize="18sp"
@@ -114,7 +135,6 @@
                         android:textSize="18sp" />
 
 
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -123,7 +143,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="70dp"
+                        android:layout_width="70sp"
                         android:layout_height="wrap_content"
                         android:text="Edad"
                         android:textSize="18sp"
@@ -135,29 +155,39 @@
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:textSize="18sp" />
+
                     <Button
                         android:id="@+id/eEdadB"
                         style="@style/Widget.AppCompat.Button.Small"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:layout_gravity="fill_horizontal"
                         android:background="@android:drawable/ic_menu_edit"
-                        android:onClick="eEdadButton"/>
+                        android:onClick="eEdadButton" />
+
                     <EditText
                         android:id="@+id/eEdadC"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
                         android:inputType="number"
-                        />
+                        android:visibility="gone" />
+
                     <Button
                         android:id="@+id/eEdadCB"
                         style="@style/Widget.AppCompat.Button.Small"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:background="@android:drawable/ic_menu_save"
+                        android:onClick="eEdadButtonC"
+                        android:visibility="gone" />
+                    <Button
+                        android:id="@+id/cEdadB"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:background="@android:drawable/ic_delete"
                         android:visibility="gone"
-                        android:background="@android:drawable/ic_menu_edit"
-                        android:onClick="eEdadButtonC"/>
+                        android:onClick="cEdadB"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -167,7 +197,7 @@
 
                     <TextView
                         android:id="@+id/textView5"
-                        android:layout_width="70dp"
+                        android:layout_width="70sp"
                         android:layout_height="wrap_content"
                         android:text="Celular"
                         android:textSize="18sp"
@@ -179,29 +209,39 @@
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:textSize="18sp" />
+
                     <Button
                         android:id="@+id/eTelefonoB"
                         style="@style/Widget.AppCompat.Button.Small"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
                         android:layout_gravity="center_horizontal"
                         android:background="@android:drawable/ic_menu_edit"
-                        android:onClick="eTelB"/>
+                        android:onClick="eTelB" />
+
                     <EditText
                         android:id="@+id/eTelefonoC"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
                         android:inputType="number"
-                        />
+                        android:visibility="gone" />
+
                     <Button
                         android:id="@+id/eTelefonoCB"
                         style="@style/Widget.AppCompat.Button.Small"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:background="@android:drawable/ic_menu_save"
+                        android:onClick="eTelCB"
+                        android:visibility="gone" />
+                    <Button
+                        android:id="@+id/cTelefonoB"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:background="@android:drawable/ic_delete"
                         android:visibility="gone"
-                        android:background="@android:drawable/ic_menu_edit"
-                        android:onClick="eTelCB"/>
+                        android:onClick="cTelefonoB"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -212,7 +252,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginRight="5sp"
                         android:text="Rango de Edades"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -221,15 +261,23 @@
                         android:id="@+id/eRMinimo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:inputType="number"
+                        android:layout_marginRight="5sp"
                         android:textSize="18sp" />
+                    <EditText
+                        android:id="@+id/eRMinimoE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5sp"
+                        android:inputType="number"
+                        android:visibility="gone"
+                        android:textSize="18sp"
+                        />
 
                     <TextView
                         android:id="@+id/textView6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginRight="5sp"
                         android:text="-"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -238,9 +286,43 @@
                         android:id="@+id/eRMaximo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:inputType="number"
+                        android:layout_marginRight="5sp"
                         android:textSize="18sp" />
+                    <EditText
+                        android:id="@+id/eRMaximoE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5sp"
+                        android:visibility="gone"
+                        android:inputType="number"
+                        android:textSize="18sp"
+                        />
+                    <Button
+                        android:id="@+id/eREdadesB"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@android:drawable/ic_menu_edit"
+                        android:onClick="eREdadesB" />
+
+                    <Button
+                        android:id="@+id/eREdadesCB"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@android:drawable/ic_menu_save"
+                        android:onClick="eREdadesCB"
+                        android:visibility="gone" />
+                    <Button
+                        android:id="@+id/cREdadesB"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="20sp"
+                        android:layout_height="20sp"
+                        android:background="@android:drawable/ic_delete"
+                        android:visibility="gone"
+                        android:onClick="cREdadesB"/>
 
                 </LinearLayout>
 
