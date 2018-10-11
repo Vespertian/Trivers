@@ -166,6 +166,7 @@ open class PrivateProfileActivity : AppCompatActivity() {
         eEdadB.visibility=View.GONE
         eEdadC.visibility=View.VISIBLE
         eEdadCB.visibility=View.VISIBLE
+        cEdadB.visibility=View.VISIBLE
     }
 
     fun eEdadButtonC(view: View){
@@ -176,8 +177,20 @@ open class PrivateProfileActivity : AppCompatActivity() {
         eEdadB.visibility=View.VISIBLE
         eEdadC.visibility=View.GONE
         eEdadCB.visibility=View.GONE
+        cEdadB.visibility=View.GONE
         dbRef.child("age").setValue(eEdadC.text.toString())
         actualizar()
+    }
+
+    fun cEdadB(view:View){
+        cEdadB()
+    }
+    private fun cEdadB(){
+        eEdad.visibility=View.VISIBLE
+        eEdadB.visibility=View.VISIBLE
+        eEdadC.visibility=View.GONE
+        cEdadB.visibility=View.GONE
+        eEdadCB.visibility=View.GONE
     }
 
     fun eDescrB(view: View){
@@ -192,6 +205,7 @@ open class PrivateProfileActivity : AppCompatActivity() {
         eDescripcionB.visibility=View.GONE
         eDescripcionC.visibility=View.VISIBLE
         eDescripcionCB.visibility=View.VISIBLE
+        cDescripcionB.visibility=View.VISIBLE
     }
 
     fun eDescrCB(view: View){
@@ -200,12 +214,23 @@ open class PrivateProfileActivity : AppCompatActivity() {
     private fun eDescrCB(){
         eDescripcion.visibility=View.VISIBLE
         eDescripcionB.visibility=View.VISIBLE
+        cDescripcionB.visibility=View.GONE
         eDescripcionC.visibility=View.GONE
         eDescripcionCB.visibility=View.GONE
         dbRef.child("description").setValue(eDescripcionC.text.toString())
         actualizar()
     }
 
+    fun cDescripcionB(view: View){
+        cDescripcionB()
+    }
+    private fun cDescripcionB(){
+        eDescripcion.visibility=View.VISIBLE
+        eDescripcionB.visibility=View.VISIBLE
+        eDescripcionC.visibility=View.GONE
+        eDescripcionCB.visibility=View.GONE
+        cDescripcionB.visibility=View.GONE
+    }
 
     fun eTelB(view: View){
         eTelB()
@@ -227,6 +252,15 @@ open class PrivateProfileActivity : AppCompatActivity() {
         eTelefonoCB.visibility=View.GONE
         dbRef.child("phoneNumber").setValue(eTelefonoC.text.toString())
         actualizar()
+    }
+    fun cTelefonoB(view: View){
+        cTelefonoB()
+    }
+    private fun cTelefonoB(){
+        eTelefono.visibility=View.VISIBLE
+        eTelefonoB.visibility=View.VISIBLE
+        eTelefonoC.visibility=View.GONE
+        eTelefonoCB.visibility=View.GONE
     }
 
     fun eREdadesB(view: View){
@@ -254,5 +288,16 @@ open class PrivateProfileActivity : AppCompatActivity() {
         dbRef.child("rangoMinimo").setValue(eRMinimoE.text.toString())
         dbRef.child("rangoMaximo").setValue(eRMaximoE.text.toString())
         actualizar()
+    }
+    fun cREdadesB(view: View){
+        cREdadesB()
+    }
+    private fun cREdadesB(){
+        eRMinimo.visibility=View.VISIBLE
+        eRMaximo.visibility=View.VISIBLE
+        eREdadesB.visibility=View.VISIBLE
+        eRMaximoE.visibility=View.GONE
+        eRMinimoE.visibility=View.GONE
+        eREdadesCB.visibility=View.GONE
     }
 }
