@@ -43,6 +43,14 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.google.android.gms:play-services-auth:11.6.2'
     apply plugin: 'com.google.gms.google-services'
+
+    def nav_version = "1.0.0-alpha06"
+
+    implementation "android.arch.navigation:navigation-fragment:$nav_version" // use -ktx for Kotlin
+    implementation "android.arch.navigation:navigation-ui:$nav_version" // use -ktx for Kotlin
+
+    // optional - Test helpers
+    androidTestImplementation "android.arch.navigation:navigation-testing:$nav_version" // use -ktx for Kotlin
 }
 
 apply plugin: 'com.google.gms.google-services'

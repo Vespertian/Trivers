@@ -60,6 +60,7 @@ class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnec
 
     fun google_login(view: View){
         signIn()
+        progessBarL.visibility = View.VISIBLE
     }
 
     private fun signIn() {
@@ -93,7 +94,8 @@ class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnec
                         val user = auth.currentUser
                         alert("Inició con el correo: ${user!!.email}") {
                             title("Iniciando sesión...")
-                            okButton {action_Information()}
+                            okButton {action_Information()
+                                progessBarL.visibility = View.INVISIBLE}
                         }.show()
                     }
                 }
