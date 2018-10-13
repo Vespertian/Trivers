@@ -6,12 +6,15 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.*
+import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -20,6 +23,7 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_private_profile.*
 import kotlinx.android.synthetic.main.activity_private_profile.view.*
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.startActivity
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
@@ -42,6 +46,7 @@ open class PrivateProfileActivity : AppCompatActivity() {
     private lateinit var eEdadB:Button
     private lateinit var eEdadC:EditText
     private lateinit var eEdadCB:Button
+    private lateinit var navigation: BottomNavigationView
     private var fileUri: Uri? =null
     private var bitmap: Bitmap? = null
     private val GALLERY=1
@@ -64,7 +69,22 @@ open class PrivateProfileActivity : AppCompatActivity() {
         eEdadB=findViewById(R.id.eEdadB)
         eEdadC=findViewById(R.id.eEdadC)
         eEdadCB=findViewById(R.id.eEdadCB)
+        navigation = findViewById(R.id.navigation)
+        navigation()
         actualizar()
+    }
+
+    open fun navigation(){
+        navigation.setOnNavigationItemSelectedListener(object : BottomNavigationView.OnNavigationItemSelectedListener {
+            override fun onNavigationItemSelected(item: MenuItem): Boolean {
+                when {
+                    item.itemId == R.id.navigation_profile -> startActivity(Intent(this@PrivateProfileActivity, PrivateProfileActivity::class.java))
+                    item.itemId == R.id.navigation_match -> startActivity(Intent(this@PrivateProfileActivity, TriviasTemasActivity::class.java))
+                    item.itemId == R.id.navigation_trivias -> startActivity(Intent(this@PrivateProfileActivity, TriviasTemasActivity::class.java))
+                }
+                return true
+            }
+        })
     }
 
     private fun actualizar(){
@@ -313,11 +333,6 @@ open class PrivateProfileActivity : AppCompatActivity() {
         eRMinimoE.visibility=View.GONE
         eREdadesCB.visibility=View.GONE
         cREdadesB.visibility=View.GONE
-    }
-
-    fun irTrivia(view: View){
-        val intent = Intent(this, TriviasTemasActivity::class.java)
-        startActivity(intent)
     }
 
     fun PPContactar(view: View){
