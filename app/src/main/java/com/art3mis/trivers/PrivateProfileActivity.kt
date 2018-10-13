@@ -315,6 +315,11 @@ open class PrivateProfileActivity : AppCompatActivity() {
         cREdadesB.visibility=View.GONE
     }
 
+    fun irTrivia(view: View){
+        val intent = Intent(this, TriviasTemasActivity::class.java)
+        startActivity(intent)
+    }
+
     fun PPContactar(view: View){
 
     }
