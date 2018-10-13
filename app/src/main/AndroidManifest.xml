@@ -24,6 +24,7 @@
         <activity android:name=".PrivateProfileActivity" />
         <activity android:name=".ForgotPassActivity" />
         <activity android:name=".information" />
+        <activity android:name=".TriviasTemasActivity"/>
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"></activity>
