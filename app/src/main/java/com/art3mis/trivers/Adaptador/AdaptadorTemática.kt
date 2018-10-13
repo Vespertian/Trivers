@@ -14,14 +14,17 @@ import com.art3mis.trivers.R
 import kotlinx.android.synthetic.main.item_cargando.view.*
 import kotlinx.android.synthetic.main.item_tematicas.view.*
 
-internal class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+internal class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view) {//No se usa pero se deja por si algo
     var progressBar:ProgressBar=view.progressBar
-
 }
 
 internal class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     var tematicaTrivias:TextView=itemView.tematicaTrivias
     var numTrivias:TextView=itemView.numTrivias
+}
+
+internal class nullViewHolder(view:View):RecyclerView.ViewHolder(view){
+
 }
 
 
@@ -55,7 +58,7 @@ class AdaptadorTemática(reciclerView: RecyclerView,internal var activity: Activ
         return if(itemTematicas[position]==null)VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {//ViewGroup? y RecyclerView.ViewHolder? <<< Tenían el signo de interrogación, al final retornaba null
         if(viewType==VIEW_TYPE_ITEM){
             val view =LayoutInflater.from(activity).inflate(R.layout.item_tematicas,parent,false)
             return ItemViewHolder(view)
@@ -64,16 +67,15 @@ class AdaptadorTemática(reciclerView: RecyclerView,internal var activity: Activ
             val view =LayoutInflater.from(activity).inflate(R.layout.item_cargando,parent,false)
             return LoadingViewHolder(view)
         }
-        return null
+        return  nullViewHolder(view = LayoutInflater.from(activity).inflate(R.layout.item_cargando,parent,false))
     }
 
     override fun getItemCount(): Int {
         return itemTematicas.size
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {//RecyclerView.ViewHolder? <<< tenía el signo de interrogación
         if(holder is ItemViewHolder){
-            val item =itemTematicas.size
             holder.tematicaTrivias.text=itemTematicas[position]!!.tematicaTrivias
             holder.numTrivias.text="Hay "+itemTematicas[position]!!.numTrivias +" Trivias"
         }
