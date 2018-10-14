@@ -46,6 +46,10 @@ class TriviasTemasActivity:AppCompatActivity(){
         dbTriviaRef=database.getReference("Trivias/Tematicas")
         navigation = findViewById(R.id.navigation)
         navigation()
+        spinnerTematicas=findViewById(R.id.spinnerTematicas)
+        adapterTematica= ArrayAdapter<CharSequence>(this,R.layout.simple_spiner_tematicas)
+        adapterTematica.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        recicler_view=findViewById(R.id.recicler_view)
 
         //Cargando las tematicas de la trivia
 
@@ -80,10 +84,10 @@ class TriviasTemasActivity:AppCompatActivity(){
 //        Toast.makeText(this,view.tematicaTrivias.text.toString(),Toast.LENGTH_LONG).show()
     }
     private fun trivias(dbTematica:DatabaseReference){
-        val intent = Intent(this, TriviasActivity()::class.java)
-        intent.putExtra("subTematica",dbTematica.key)
-        intent.putExtra("Tematica",database.getReference("Trivias").child(spinnerTematicas.selectedItem.toString()).key.toString())
-        startActivity(intent)
+        val intent11 = Intent(this, TriviasActivity()::class.java)
+        intent11.putExtra("subTematica",dbTematica.key)
+        intent11.putExtra("Tematica",database.getReference("Trivias").child(spinnerTematicas.selectedItem.toString()).key.toString())
+        startActivity(intent11)
     }
 
     private fun cargarTematicas() {
