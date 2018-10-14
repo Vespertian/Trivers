@@ -1,8 +1,11 @@
 package com.art3mis.trivers
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.art3mis.trivers.Adaptador.AdaptadorTemática
@@ -23,6 +26,7 @@ class TriviasTemasActivity:AppCompatActivity(){
     private lateinit var database: FirebaseDatabase
     private lateinit var dbUserRef: DatabaseReference
     private lateinit var dbTriviaRef:DatabaseReference
+    private lateinit var navigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,15 +36,31 @@ class TriviasTemasActivity:AppCompatActivity(){
         database= FirebaseDatabase.getInstance()
         dbUserRef=database.getReference("Users").child(usuario.uid)
         dbTriviaRef=database.getReference("Trivias/Tematicas")
+        navigation = findViewById(R.id.navigation1)
 
         //Cargando primeras 7 temáticas de trivias
         cargarTematicas()
+        navigation()
 
         //Inicializando Vista
         recicler_view.layoutManager =LinearLayoutManager(this)
         adapter= AdaptadorTemática(recicler_view,this,itemTematicas)
         recicler_view.adapter=adapter
 //        adapter.setCargarMas(this)
+    }
+
+    fun navigation(){
+        navigation.selectedItemId = R.id.navigation_trivias
+        navigation.setOnNavigationItemSelectedListener(object : BottomNavigationView.OnNavigationItemSelectedListener {
+            override fun onNavigationItemSelected(item: MenuItem): Boolean {
+                when {
+                    item.itemId == R.id.navigation_profile -> startActivity(Intent(this@TriviasTemasActivity, PrivateProfileActivity::class.java))
+                    item.itemId == R.id.navigation_match -> startActivity(Intent(this@TriviasTemasActivity, TriviasTemasActivity::class.java))
+                    item.itemId == R.id.navigation_trivias -> startActivity(Intent(this@TriviasTemasActivity, TriviasTemasActivity::class.java))
+                }
+                return true
+            }
+        })
     }
 
     /*override fun onCargarMas() {

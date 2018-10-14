@@ -74,7 +74,7 @@ open class PrivateProfileActivity : AppCompatActivity() {
         actualizar()
     }
 
-    open fun navigation(){
+    fun navigation(){
         navigation.setOnNavigationItemSelectedListener(object : BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 when {
