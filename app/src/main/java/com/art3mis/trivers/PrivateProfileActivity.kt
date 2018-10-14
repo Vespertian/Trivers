@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_private_profile.*
 import kotlinx.android.synthetic.main.activity_private_profile.view.*
+import org.jetbrains.anko.MAXDPI
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import java.io.ByteArrayOutputStream
@@ -75,14 +76,16 @@ open class PrivateProfileActivity : AppCompatActivity() {
     }
 
     fun navigation(){
+        navigation.selectedItemId = R.id.navigation_profile
         navigation.setOnNavigationItemSelectedListener(object : BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 when {
                     item.itemId == R.id.navigation_profile -> startActivity(Intent(this@PrivateProfileActivity, PrivateProfileActivity::class.java))
-                    item.itemId == R.id.navigation_match -> startActivity(Intent(this@PrivateProfileActivity, TriviasTemasActivity::class.java))
+                    item.itemId == R.id.navigation_match -> startActivity(Intent(this@PrivateProfileActivity, MatchActivity::class.java))
                     item.itemId == R.id.navigation_trivias -> startActivity(Intent(this@PrivateProfileActivity, TriviasTemasActivity::class.java))
+                    item.itemId != null -> return true
                 }
-                return true
+                return false
             }
         })
     }

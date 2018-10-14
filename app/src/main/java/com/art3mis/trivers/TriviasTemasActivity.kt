@@ -36,7 +36,7 @@ class TriviasTemasActivity:AppCompatActivity(){
         database= FirebaseDatabase.getInstance()
         dbUserRef=database.getReference("Users").child(usuario.uid)
         dbTriviaRef=database.getReference("Trivias/Tematicas")
-        navigation = findViewById(R.id.navigation1)
+        navigation = findViewById(R.id.navigation)
 
         //Cargando primeras 7 temáticas de trivias
         cargarTematicas()
@@ -55,10 +55,11 @@ class TriviasTemasActivity:AppCompatActivity(){
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 when {
                     item.itemId == R.id.navigation_profile -> startActivity(Intent(this@TriviasTemasActivity, PrivateProfileActivity::class.java))
-                    item.itemId == R.id.navigation_match -> startActivity(Intent(this@TriviasTemasActivity, TriviasTemasActivity::class.java))
+                    item.itemId == R.id.navigation_match -> startActivity(Intent(this@TriviasTemasActivity, MatchActivity::class.java))
                     item.itemId == R.id.navigation_trivias -> startActivity(Intent(this@TriviasTemasActivity, TriviasTemasActivity::class.java))
+                    item.itemId != null -> return true
                 }
-                return true
+                return false
             }
         })
     }
