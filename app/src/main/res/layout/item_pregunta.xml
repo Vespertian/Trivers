@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="20sp"
+    android:layout_margin="8sp">
+    <LinearLayout
+        android:padding="10sp"
+        android:background="?android:selectableItemBackground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/Pregunta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pregunta¿?"
+            android:textSize="24sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"/>
+        <LinearLayout
+            android:padding="7sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Respuestas">
+                <RadioButton
+                    android:id="@+id/R1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <RadioButton
+                    android:id="@+id/R2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <RadioButton
+                    android:id="@+id/R3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RadioButton
+                    android:id="@+id/R4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RadioGroup>
+            <TextView
+                android:id="@+id/respuesta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="respuseta"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
