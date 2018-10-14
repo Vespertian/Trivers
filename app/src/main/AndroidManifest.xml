@@ -26,6 +26,8 @@
         <activity android:name=".information" />
         <activity android:name=".TriviasTemasActivity"
             android:label="@string/title_trivias"/>
+        <activity android:name=".TriviasActivity" android:parentActivityName=".TriviasTemasActivity"/>
+        <activity android:name=".PreguntasActivity" android:parentActivityName=".TriviasActivity"/>
         <activity
             android:name=".MatchActivity"
             android:label="@string/title_activity_match" />
