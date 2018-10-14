@@ -2,31 +2,37 @@ package com.art3mis.trivers
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.MenuItem
+import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import com.art3mis.trivers.Adaptador.AdaptadorTemática
 import com.art3mis.trivers.Modelos.Item_Tematica
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_tematica.*
 import kotlinx.android.synthetic.main.item_tematicas.view.*
 import java.util.*
 
 class TriviasTemasActivity:AppCompatActivity(){
-    var itemTematicas:MutableList<Item_Tematica?> =ArrayList()
-    lateinit var adapter:AdaptadorTemática
+    var itemTematicas:MutableList<Item_Tematica> =ArrayList()
+    lateinit var adapter:AdaptadorTemática      //Para los Subtemas
+    lateinit var adapterTematica:ArrayAdapter<CharSequence>         //Para las Tematicas
+    private lateinit var spinnerTematicas:Spinner
+    private val activity=this
 
     private lateinit var usuario: FirebaseUser
     private lateinit var uAuth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var dbUserRef: DatabaseReference
     private lateinit var dbTriviaRef:DatabaseReference
-    private lateinit var navigation: BottomNavigationView
+    private lateinit var recicler_view:RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,52 +42,101 @@ class TriviasTemasActivity:AppCompatActivity(){
         database= FirebaseDatabase.getInstance()
         dbUserRef=database.getReference("Users").child(usuario.uid)
         dbTriviaRef=database.getReference("Trivias/Tematicas")
-        navigation = findViewById(R.id.navigation)
+        spinnerTematicas=findViewById(R.id.spinnerTematicas)
+        adapterTematica= ArrayAdapter<CharSequence>(this,R.layout.simple_spiner_tematicas)
+        adapterTematica.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        recicler_view=findViewById(R.id.recicler_view)
 
-        //Cargando primeras 7 temáticas de trivias
+        //Cargando las tematicas de la trivia
+
         cargarTematicas()
-        navigation()
+        spinnerTematicas.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if(!(parent!!.getItemAtPosition(position).toString()=="Tematicas")){
+                    cargarSubTematicas(parent!!.getItemAtPosition(position).toString())
+                }
+            }
+        })
 
-        //Inicializando Vista
-        recicler_view.layoutManager =LinearLayoutManager(this)
-        adapter= AdaptadorTemática(recicler_view,this,itemTematicas)
-        recicler_view.adapter=adapter
-//        adapter.setCargarMas(this)
+
     }
 
-    fun navigation(){
-        navigation.selectedItemId = R.id.navigation_trivias
-        navigation.setOnNavigationItemSelectedListener(object : BottomNavigationView.OnNavigationItemSelectedListener {
-            override fun onNavigationItemSelected(item: MenuItem): Boolean {
-                when {
-                    item.itemId == R.id.navigation_profile -> startActivity(Intent(this@TriviasTemasActivity, PrivateProfileActivity::class.java))
-                    item.itemId == R.id.navigation_match -> startActivity(Intent(this@TriviasTemasActivity, MatchActivity::class.java))
-                    item.itemId == R.id.navigation_trivias -> startActivity(Intent(this@TriviasTemasActivity, TriviasTemasActivity::class.java))
-                    item.itemId != null -> return true
+    fun trivias(view: View){
+        trivias(database.getReference("Trivias").child(spinnerTematicas.selectedItem.toString()).child(view.tematicaTrivias.text.toString()))
+//        Toast.makeText(this,view.tematicaTrivias.text.toString(),Toast.LENGTH_LONG).show()
+    }
+    private fun trivias(dbTematica:DatabaseReference){
+        val intent = Intent(this, TriviasActivity()::class.java)
+        intent.putExtra("subTematica",dbTematica.key)
+        intent.putExtra("Tematica",database.getReference("Trivias").child(spinnerTematicas.selectedItem.toString()).key.toString())
+        startActivity(intent)
+    }
+
+    private fun cargarTematicas() {
+        dbTriviaRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {}
+            override fun onDataChange(dS: DataSnapshot) {
+                adapterTematica.add("Tematicas")
+                for (i in dS.children) {
+                    adapterTematica.add(i.key.toString())
                 }
-                return false
+                adapterTematica.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerTematicas.setAdapter(adapterTematica)
             }
         })
     }
+    private fun cargarSubTematicas(sTem:String){
+        val dbSTRef=database.getReference("Trivias/"+sTem)
+        recicler_view.layoutManager =LinearLayoutManager(this)
+        itemTematicas.clear()
 
-    /*override fun onCargarMas() {
-        val totalTemas=totTemas.text.toString().toInt()
-        val nTemaActual=contTemas.text.toString().toInt()
-        if(itemTematicas!!.size < totalTemas) //Máximo número de temáticas
-        {
-            itemTematicas!!.add(null)
-            adapter.notifyItemInserted(itemTematicas.size-1)
-            //Correr Hilo
-            Handler().postDelayed({
-                itemTematicas.removeAt(itemTematicas.size-1) //remueve nulos
-                adapter.notifyItemRemoved(itemTematicas.size)
+        dbSTRef.addListenerForSingleValueEvent(object :ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {}
+            override fun onDataChange(dS: DataSnapshot) {
 
-                //Insertar Valores
-                val index =itemTematicas.size
-                val end =index+5
+                for(i in dS.children){
+                    if(i.key.toString()!="nombre") {
+                        val tem: String = i.key.toString()
+                        val numT: String = i.childrenCount.toString()
+                        val item = Item_Tematica(tem, numT)
+                        itemTematicas.add(item)
+                    }
+                }
+                //Inicializando Vista
+                recicler_view.removeAllViewsInLayout()
+                adapter= AdaptadorTemática(recicler_view,activity,itemTematicas)
+                recicler_view.adapter=adapter
+            }
+        })
+//        adapter.setCargarMas(this) //no funciona :v
+    }
+        /* //NADA DE ACÁ PA' ABAJO FUNCIONA!!! (No he querido arreglarlo... Algún día ='D)
+        for(i in 0..6){
+            val nom=UUID.randomUUID().toString()
+            val item=Item_Tematica(nom,nom.length)
+            itemTematicas.add(item)
+        }*/
 
-                //Ejemplo
-                *//*for(i in index until end){
+        /*override fun onCargarMas() {
+    val totalTemas=totTemas.text.toString().toInt()
+    val nTemaActual=contTemas.text.toString().toInt()
+    if(itemTematicas!!.size < totalTemas) //Máximo número de temáticas
+    {
+        itemTematicas!!.add(null)
+        adapter.notifyItemInserted(itemTematicas.size-1)
+        //Correr Hilo
+        Handler().postDelayed({
+            itemTematicas.removeAt(itemTematicas.size-1) //remueve nulos
+            adapter.notifyItemRemoved(itemTematicas.size)
+
+            //Insertar Valores
+            val index =itemTematicas.size
+            val end =index+5
+
+            //Ejemplo
+            *//*for(i in index until end){
                     val nom= UUID.randomUUID().toString()
                     val item = Item_Tematica(nom,"s")
                     itemTematicas.add(item)
@@ -117,36 +172,5 @@ class TriviasTemasActivity:AppCompatActivity(){
             Toast.makeText(this,"No hay más temáticas",Toast.LENGTH_LONG).show()
         }
     }*/
-
-    fun trivias(view: View){
-        Toast.makeText(this,view.tematicaTrivias.text.toString(),Toast.LENGTH_LONG).show()
-    }
-
-    private fun cargarTematicas(){
-        dbTriviaRef.addListenerForSingleValueEvent(object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(dS: DataSnapshot) {
-                for(i in dS.children){
-                    val tem:String=i.key.toString()
-                    val numT:String=i.value.toString()
-                    print(numT)
-                    val item=Item_Tematica(tem,numT)
-                    itemTematicas.add(item)
-                }
-            }
-        })
-
-        /*
-        for(i in 0..6){
-            val nom=UUID.randomUUID().toString()
-            val item=Item_Tematica(nom,nom.length)
-            itemTematicas.add(item)
-        }*/
-    }
-
-}
-
-private fun DatabaseReference.addListenerForSingleValueEvent(valueEventListener: ValueEventListener, function: () -> Unit) {
-
 
 }
