@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <string-array name="tematicas">
+        <item>Historia</item>
+        <item>Medicina</item>
+        <item>Música</item>
+        <item>Películas</item>
+        <item>SeriesTV</item>
+        <item>Videojuegos</item>
+    </string-array>
+
 </resources>

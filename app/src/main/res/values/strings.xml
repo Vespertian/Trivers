@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Trivers</string>
     <string name="WEB_CLIENT_ID">862646870110-vhkdq2ri4ncgprappqligcjqsdq6ve00.apps.googleusercontent.com</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_match">Personas</string>
+    <string name="title_activity_Profile">Perfil</string>
+    <string name="title_activity_trivias">Trivias</string>
     <string name="title_profile">Perfil</string>
     <string name="title_trivias">Trivias</string>
     <string name="title_match">Personas</string>
-    <string name="title_activity_match">MatchActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>

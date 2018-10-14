@@ -24,12 +24,11 @@
         <activity android:name=".PrivateProfileActivity" />
         <activity android:name=".ForgotPassActivity" />
         <activity android:name=".information" />
-        <activity android:name=".TriviasTemasActivity"/>
-        <activity android:name=".TriviasActivity" android:parentActivityName=".TriviasTemasActivity"/>
-        <activity android:name=".PreguntasActivity" android:parentActivityName=".TriviasActivity"/>
+        <activity android:name=".TriviasTemasActivity"
+            android:label="@string/title_trivias"/>
         <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"></activity>
+            android:name=".MatchActivity"
+            android:label="@string/title_activity_match" />
     </application>
 
 </manifest>

@@ -77,16 +77,14 @@ open class PrivateProfileActivity : AppCompatActivity() {
 
     fun navigation(){
         navigation.selectedItemId = R.id.navigation_profile
-        navigation.setOnNavigationItemSelectedListener(object : BottomNavigationView.OnNavigationItemSelectedListener {
-            override fun onNavigationItemSelected(item: MenuItem): Boolean {
-                when {
-                    item.itemId == R.id.navigation_profile -> startActivity(Intent(this@PrivateProfileActivity, PrivateProfileActivity::class.java))
-                    item.itemId == R.id.navigation_match -> startActivity(Intent(this@PrivateProfileActivity, MatchActivity::class.java))
-                    item.itemId == R.id.navigation_trivias -> startActivity(Intent(this@PrivateProfileActivity, TriviasTemasActivity::class.java))
-                    item.itemId != null -> return true
-                }
-                return false
+        navigation.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when {
+                item.itemId == R.id.navigation_profile -> startActivity(Intent(this@PrivateProfileActivity, PrivateProfileActivity::class.java))
+                item.itemId == R.id.navigation_match -> startActivity(Intent(this@PrivateProfileActivity, MatchActivity::class.java))
+                item.itemId == R.id.navigation_trivias -> startActivity(Intent(this@PrivateProfileActivity, TriviasTemasActivity::class.java))
+                item.itemId != null -> return@OnNavigationItemSelectedListener true
             }
+            false
         })
     }
 
