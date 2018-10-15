@@ -1,4 +1,5 @@
 package com.art3mis.trivers
+
 import android.content.Intent
 import android.os.Bundle
 import com.google.firebase.database.DatabaseReference
@@ -14,8 +15,8 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import com.art3mis.trivers.adaptador.AdaptadorPreguntas
-import com.art3mis.trivers.modelos.Item_Preguntas
+import com.art3mis.trivers.Adaptador.AdaptadorPreguntas
+import com.art3mis.trivers.Modelos.Item_Preguntas
 import com.google.firebase.database.*
 import java.util.*
 
@@ -66,6 +67,8 @@ class PreguntasActivity:AppCompatActivity() {
             }
         })
     }
+
+
     fun Responder(view: View){
         var punt=0
         var r=true
@@ -87,12 +90,25 @@ class PreguntasActivity:AppCompatActivity() {
                 r=false
                 break
             }
-//            Toast.makeText(baseContext,rD.text.toString(),Toast.LENGTH_SHORT).show()
         }
         if(r && recicler_view.childCount!=0){
             val pt=recicler_view.childCount
-            Toast.makeText(this,((punt.toDouble()/pt)*100).toString(),Toast.LENGTH_SHORT).show()
-            dbUserRef.child("Trivias/"+intent2.getStringExtra("Trivia")).setValue(((punt.toDouble()/pt)*100).toInt().toString()+"%")
+            val res=((punt.toDouble()/pt)*100).toInt()
+            dbUserRef.child("Trivias/"+intent2.getStringExtra("Trivia")).setValue(res.toString()+"%")
+            val dbMatch=database.getReference("Matching")
+            val vM=when (res){
+                in 0..1 -> 0.toString()
+                in 2..20 -> 20.toString()
+                in 21..40 ->40.toString()
+                in 41..60 ->60.toString()
+                in 61..80 ->80.toString()
+                in 81..90 ->90.toString()
+                in 91..95 ->95.toString()
+                else -> 100.toString()
+            }
+            dbMatch.child("Trivias/"+intent2.getStringExtra("Trivia")+"/"+vM).setValue(dbUserRef.key)
+            Toast.makeText(this,vM,Toast.LENGTH_SHORT).show()
+            finish()
         }else{
             Toast.makeText(baseContext,"No ha respondido todas las preguntas",Toast.LENGTH_SHORT).show()
         }

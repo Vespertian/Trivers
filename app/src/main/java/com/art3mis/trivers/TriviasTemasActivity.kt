@@ -10,8 +10,8 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import com.art3mis.trivers.adaptador.AdaptadorTemática
-import com.art3mis.trivers.modelos.Item_Tematica
+import com.art3mis.trivers.Adaptador.AdaptadorTemática
+import com.art3mis.trivers.Modelos.Item_Tematica
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -57,10 +57,15 @@ class TriviasTemasActivity:AppCompatActivity(){
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(parent!!.getItemAtPosition(position).toString() != "Tematicas"){
                     cargarSubTematicas(parent!!.getItemAtPosition(position).toString())
+                }else{ //recier agregado
+                    if(itemTematicas.isNotEmpty()) {
+                        itemTematicas.clear()
+                        adapter= AdaptadorTemática(recicler_view,activity,itemTematicas)
+                        recicler_view.adapter=adapter
+                    }
                 }
             }
         }
-
     }
 
     fun navigation(){
@@ -91,6 +96,7 @@ class TriviasTemasActivity:AppCompatActivity(){
         dbTriviaRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(dS: DataSnapshot) {
+                adapterTematica.add("Tematicas")
                 for (i in dS.children) {
                     adapterTematica.add(i.key.toString())
                 }
@@ -118,7 +124,6 @@ class TriviasTemasActivity:AppCompatActivity(){
                     }
                 }
                 //Inicializando Vista
-                recicler_view.removeAllViewsInLayout()
                 adapter= AdaptadorTemática(recicler_view,activity,itemTematicas)
                 recicler_view.adapter=adapter
             }
