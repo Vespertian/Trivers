@@ -8,23 +8,16 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
-import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.*
-import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_private_profile.*
-import kotlinx.android.synthetic.main.activity_private_profile.view.*
-import org.jetbrains.anko.MAXDPI
 import org.jetbrains.anko.alert
-import org.jetbrains.anko.startActivity
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 

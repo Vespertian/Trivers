@@ -6,23 +6,14 @@ import android.support.v7.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.activity_trivias.*
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
-import com.art3mis.trivers.Adaptador.AdaptadorTemática
-import com.art3mis.trivers.Adaptador.AdaptadorTrivias
-import com.art3mis.trivers.Modelos.Item_Tematica
-import com.art3mis.trivers.Modelos.Item_Trivias
+import com.art3mis.trivers.adaptador.AdaptadorTrivias
+import com.art3mis.trivers.modelos.Item_Trivias
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.activity_tematica.*
-import kotlinx.android.synthetic.main.item_tematicas.view.*
 import kotlinx.android.synthetic.main.item_trivias.view.*
 import java.util.*
 

@@ -14,8 +14,8 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import com.art3mis.trivers.Adaptador.AdaptadorPreguntas
-import com.art3mis.trivers.Modelos.Item_Preguntas
+import com.art3mis.trivers.adaptador.AdaptadorPreguntas
+import com.art3mis.trivers.modelos.Item_Preguntas
 import com.google.firebase.database.*
 import java.util.*
 

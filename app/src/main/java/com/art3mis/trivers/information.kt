@@ -10,7 +10,6 @@ import org.jetbrains.anko.alert
 open class information: AppCompatActivity() {
     private lateinit var dbreference: DatabaseReference
     private lateinit var userID: String
-    private var userInformation: HashMap<String, Any> = HashMap()
 
     fun registerInformation(user: FirebaseUser, name: String, lastName: String?, email:String, age: String, phoneNumber: String, rangoMinimo: String, rangoMaximo: String, description: String, fPerfil:String){
         dbreference = FirebaseDatabase.getInstance().getReference("Users")

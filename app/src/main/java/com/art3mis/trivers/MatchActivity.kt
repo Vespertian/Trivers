@@ -13,15 +13,31 @@ import kotlinx.android.synthetic.main.activity_match.*
 class MatchActivity : AppCompatActivity() {
     private lateinit var dbTriviaRef: DatabaseReference
     private lateinit var spinner: Spinner
+    lateinit var adapterTematica: ArrayAdapter<CharSequence>         //Para las Tematicas
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match)
         navigation()
 
-        dbTriviaRef = FirebaseDatabase.getInstance().getReference("Trivias")
+        dbTriviaRef = FirebaseDatabase.getInstance().getReference("Trivias/Tematicas")
         spinner = findViewById(R.id.spinner)
-        spinner.adapter = ArrayAdapter.createFromResource(this, R.array.tematicas, android.R.layout.simple_spinner_dropdown_item)
+        adapterTematica= ArrayAdapter<CharSequence>(this,R.layout.simple_spiner_tematicas)
+        adapterTematica.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        cargarTematicas()
+    }
+
+    private fun cargarTematicas() {
+        dbTriviaRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {}
+            override fun onDataChange(dS: DataSnapshot) {
+                for (i in dS.children) {
+                    adapterTematica.add(i.key.toString())
+                }
+                adapterTematica.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.setAdapter(adapterTematica)
+            }
+        })
     }
 
     fun navigation(){
@@ -34,14 +50,6 @@ class MatchActivity : AppCompatActivity() {
                 item.itemId != null -> return@OnNavigationItemSelectedListener true
             }
             false
-        })
-    }
-    private fun leerTematicas() {
-        dbTriviaRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(dS: DataSnapshot) {
-                val value = dS.getValue(String::class.java)
-            }
         })
     }
 }
