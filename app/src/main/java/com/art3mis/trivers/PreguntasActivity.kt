@@ -2,12 +2,7 @@ package com.art3mis.trivers
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.firebase.database.DatabaseReference
 import android.support.v7.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.activity_preguntas.*
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -15,9 +10,12 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import com.art3mis.trivers.Adaptador.AdaptadorPreguntas
-import com.art3mis.trivers.Modelos.Item_Preguntas
+import com.art3mis.trivers.adaptador.AdaptadorPreguntas
+import com.art3mis.trivers.modelos.Item_Preguntas
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.activity_preguntas.*
 import java.util.*
 
 class PreguntasActivity:AppCompatActivity() {
@@ -59,7 +57,7 @@ class PreguntasActivity:AppCompatActivity() {
                     val respuesta2=i.child("R2").value.toString()
                     val respuesta3=i.child("R3").value.toString()
                     val respuesta4=i.child("R4").value.toString()
-                    val item=Item_Preguntas(pregunta,respuesta1,respuesta2,respuesta3,respuesta4,respuesta)
+                    val item= Item_Preguntas(pregunta,respuesta1,respuesta2,respuesta3,respuesta4,respuesta)
                     itemsPreguntas.add(item)
                 }
                 adpTr  = AdaptadorPreguntas(recicler_view, activity, itemsPreguntas)

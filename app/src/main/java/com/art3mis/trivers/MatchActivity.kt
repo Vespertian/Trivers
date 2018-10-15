@@ -31,11 +31,12 @@ class MatchActivity : AppCompatActivity() {
         dbTriviaRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(dS: DataSnapshot) {
+                adapterTematica.add("Todo")
                 for (i in dS.children) {
                     adapterTematica.add(i.key.toString())
                 }
                 adapterTematica.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinner.setAdapter(adapterTematica)
+                spinner.adapter = adapterTematica
             }
         })
     }

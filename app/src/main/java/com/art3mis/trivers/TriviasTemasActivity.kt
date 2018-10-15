@@ -10,8 +10,8 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import com.art3mis.trivers.Adaptador.AdaptadorTemática
-import com.art3mis.trivers.Modelos.Item_Tematica
+import com.art3mis.trivers.adaptador.AdaptadorTemática
+import com.art3mis.trivers.modelos.Item_Tematica
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -44,7 +44,7 @@ class TriviasTemasActivity:AppCompatActivity(){
         navigation = findViewById(R.id.navigation)
         navigation()
         spinnerTematicas=findViewById(R.id.spinnerTematicas)
-        adapterTematica= ArrayAdapter<CharSequence>(this,R.layout.simple_spiner_tematicas)
+        adapterTematica= ArrayAdapter(this,R.layout.simple_spiner_tematicas)
         adapterTematica.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         recicler_view=findViewById(R.id.recicler_view)
 
@@ -96,12 +96,11 @@ class TriviasTemasActivity:AppCompatActivity(){
         dbTriviaRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(dS: DataSnapshot) {
-                adapterTematica.add("Tematicas")
                 for (i in dS.children) {
                     adapterTematica.add(i.key.toString())
                 }
                 adapterTematica.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinnerTematicas.setAdapter(adapterTematica)
+                spinnerTematicas.adapter = adapterTematica
             }
         })
     }
