@@ -1,16 +1,14 @@
 package com.art3mis.trivers.adaptador
 
 import android.app.Activity
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.art3mis.trivers.interfaces.ICargarMas
-import com.art3mis.trivers.modelos.Item_Tematica
 import com.art3mis.trivers.R
+import com.art3mis.trivers.modelos.Item_Tematica
 import kotlinx.android.synthetic.main.item_cargando.view.*
 import kotlinx.android.synthetic.main.item_tematicas.view.*
 
@@ -32,7 +30,7 @@ internal class nullViewHolder(view:View):RecyclerView.ViewHolder(view){
 class AdaptadorTemática(reciclerView: RecyclerView,internal var activity: Activity,internal var itemTematicas: MutableList<Item_Tematica>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_ITEM=0
     private val VIEW_TYPE_LOADING=1
-    internal var cargar: ICargarMas?=null
+/*    internal var cargar: ICargarMas?=null
     var isCargando:Boolean = false
     internal var visibleThreshold=5
     internal var lastVisibleItem:Int=0
@@ -52,7 +50,7 @@ class AdaptadorTemática(reciclerView: RecyclerView,internal var activity: Activ
                 }
             }
         })
-    }
+    }*/
 
 
     override fun getItemViewType(position: Int): Int {
@@ -85,11 +83,11 @@ class AdaptadorTemática(reciclerView: RecyclerView,internal var activity: Activ
         }
     }
 
-    fun setCargado(){
+/*    fun setCargado(){
         isCargando=false
     }
 
     fun setCargarMas(iCargarMas: ICargarMas){
         this.cargar=iCargarMas
-    }
+    }*/
 }

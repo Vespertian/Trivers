@@ -115,12 +115,10 @@ class TriviasTemasActivity:AppCompatActivity(){
             override fun onDataChange(dS: DataSnapshot) {
 
                 for(i in dS.children){
-                    if(i.key.toString()!="nombre") {
-                        val tem: String = i.key.toString()
-                        val numT: String = i.childrenCount.toString()
-                        val item = Item_Tematica(tem, numT)
-                        itemTematicas.add(item)
-                    }
+                    val tem: String = i.key.toString()
+                    val numT: String = i.childrenCount.toString()
+                    val item = Item_Tematica(tem, numT)
+                    itemTematicas.add(item)
                 }
                 //Inicializando Vista
                 adapter= AdaptadorTemática(recicler_view,activity,itemTematicas)

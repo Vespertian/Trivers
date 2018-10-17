@@ -95,16 +95,12 @@ class PreguntasActivity:AppCompatActivity() {
             dbUserRef.child("Trivias/"+intent2.getStringExtra("Trivia")).setValue(res.toString()+"%")
             val dbMatch=database.getReference("Matching")
             val vM=when (res){
-                in 0..1 -> 0.toString()
-                in 2..20 -> 20.toString()
-                in 21..40 ->40.toString()
-                in 41..60 ->60.toString()
-                in 61..80 ->80.toString()
-                in 81..90 ->90.toString()
-                in 91..95 ->95.toString()
+                in 0..20 -> 20.toString()
+                in 21..50 ->50.toString()
+                in 51..70 ->70.toString()
                 else -> 100.toString()
             }
-            dbMatch.child("Trivias/"+intent2.getStringExtra("Trivia")+"/"+vM).setValue(dbUserRef.key)
+            dbMatch.child(intent2.getStringExtra("Trivia")+"/"+vM).setValue(dbUserRef.key)
             Toast.makeText(this,vM,Toast.LENGTH_SHORT).show()
             finish()
         }else{
