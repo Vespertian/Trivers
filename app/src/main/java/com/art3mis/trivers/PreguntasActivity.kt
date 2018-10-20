@@ -94,25 +94,35 @@ class PreguntasActivity:AppCompatActivity() {
             val res=((punt.toDouble()/pt)*100).toInt()
             dbUserRef.child("Trivias/"+intent2.getStringExtra("Trivia")).setValue(res.toString())
             val dbMatch=database.getReference("Matching")
-            val vM=when (res){
-                in 0..20 -> 20.toString()
-                in 21..50 ->50.toString()
-                in 51..70 ->70.toString()
-                else -> 100.toString()
-            }
             dbUserRef.child("Trivias/"+intent2.getStringExtra("subTematica")).addListenerForSingleValueEvent(object :ValueEventListener{
                 override fun onCancelled(p0: DatabaseError) {}
                 override fun onDataChange(p0: DataSnapshot) {
-                    var i=0
-                    var valor=0.0
-                    for(dS in p0.children){
-                        valor=valor+(dS.value).toString().toInt()
-                        i++
-                    }
-                    valor=valor/i
-                    dbMatch.child(intent2.getStringExtra("subTematica")+"/"+vM).setValue(valor)
-                    Toast.makeText(baseContext,vM,Toast.LENGTH_SHORT).show()
-                    finish()
+                    dbMatch.child(intent2.getStringExtra("subTematica")).addListenerForSingleValueEvent(object :ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {}
+                        override fun onDataChange(p1: DataSnapshot) {
+                            for(dS in p1.children){
+                                if(dS.hasChild(usuario.uid)){
+                                    dbMatch.child(intent2.getStringExtra("subTematica")+"/"+dS.key.toString()+"/"+usuario.uid).removeValue()
+                                }
+                            }
+                            var i=0
+                            var valor=0.0
+                            for(dS in p0.children){
+                                valor=valor+(dS.value).toString().toInt()
+                                i++
+                            }
+                            valor=valor/i
+                            val vM=when (valor){
+                                in 0..20 -> 20.toString()
+                                in 21..50 ->50.toString()
+                                in 51..70 ->70.toString()
+                                else -> 100.toString()
+                            }
+                            dbMatch.child(intent2.getStringExtra("subTematica")+"/"+vM+"/"+usuario.uid).setValue(usuario.uid)
+                            Toast.makeText(baseContext,vM,Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                    })
                 }
             })
         }else{
