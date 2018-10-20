@@ -92,7 +92,7 @@ class PreguntasActivity:AppCompatActivity() {
         if(r && recicler_view.childCount!=0){
             val pt=recicler_view.childCount
             val res=((punt.toDouble()/pt)*100).toInt()
-            dbUserRef.child("Trivias/"+intent2.getStringExtra("Trivia")).setValue(res.toString()+"%")
+            dbUserRef.child("Trivias/"+intent2.getStringExtra("Trivia")).setValue(res.toString())
             val dbMatch=database.getReference("Matching")
             val vM=when (res){
                 in 0..20 -> 20.toString()
@@ -100,9 +100,21 @@ class PreguntasActivity:AppCompatActivity() {
                 in 51..70 ->70.toString()
                 else -> 100.toString()
             }
-            dbMatch.child(intent2.getStringExtra("Trivia")+"/"+vM).setValue(dbUserRef.key)
-            Toast.makeText(this,vM,Toast.LENGTH_SHORT).show()
-            finish()
+            dbUserRef.child("Trivias/"+intent2.getStringExtra("subTematica")).addListenerForSingleValueEvent(object :ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(p0: DataSnapshot) {
+                    var i=0
+                    var valor=0.0
+                    for(dS in p0.children){
+                        valor=valor+(dS.value).toString().toInt()
+                        i++
+                    }
+                    valor=valor/i
+                    dbMatch.child(intent2.getStringExtra("subTematica")+"/"+vM).setValue(valor)
+                    Toast.makeText(baseContext,vM,Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            })
         }else{
             Toast.makeText(baseContext,"No ha respondido todas las preguntas",Toast.LENGTH_SHORT).show()
         }

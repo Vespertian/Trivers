@@ -81,6 +81,7 @@ class TriviasActivity: AppCompatActivity() {
     }
     private fun Responder(dbTrivia:DatabaseReference){
         val intent = Intent(this, PreguntasActivity()::class.java)
+        intent.putExtra("subTematica",intent2.getStringExtra("Tematica")+"/"+intent2.getStringExtra("subTematica"))
         intent.putExtra("Trivia",intent2.getStringExtra("Tematica")+"/"+intent2.getStringExtra("subTematica")+"/"+dbTrivia.key)
         startActivity(intent)
     }
