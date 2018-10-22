@@ -36,7 +36,9 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
         return itemUsuario.size
     }
 
-
+    override fun getItemViewType(position: Int): Int {
+        return if(itemUsuario[position]==null)VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ItemViewHolderUser){
@@ -66,6 +68,7 @@ data class Item_Usuario (var uid: String){
     private lateinit var databaseReference: DatabaseReference
     lateinit var completeName: String
     fun getName(){
+        //Debo de poner esto en un lugar donde sí ejecute antes de dar el valor del textView
         databaseReference = FirebaseDatabase.getInstance().getReference("Users/$uid")
         databaseReference.addValueEventListener(object :ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
