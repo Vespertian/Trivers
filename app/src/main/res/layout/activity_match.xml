@@ -83,7 +83,7 @@
                 android:text="0"/>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recicler_view"
+                android:id="@+id/recicler_view_match"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 

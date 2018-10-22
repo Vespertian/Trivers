@@ -121,6 +121,7 @@ class PreguntasActivity:AppCompatActivity() {
                             dbMatch.child(intent2.getStringExtra("subTematica")+"/"+vM+"/"+usuario.uid).setValue(usuario.uid)
                             Toast.makeText(baseContext,vM,Toast.LENGTH_SHORT).show()
                             finish()
+                            startActivity(Intent(this@PreguntasActivity, TriviasTemasActivity::class.java))
                         }
                     })
                 }
