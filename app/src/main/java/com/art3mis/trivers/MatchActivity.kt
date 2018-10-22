@@ -21,20 +21,19 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_match.*
 import kotlinx.android.synthetic.main.item_tematicas.view.*
+import kotlinx.android.synthetic.main.item_usuario.view.*
 import java.util.*
 
 internal class ItemViewHolderUser(itemView: View) : RecyclerView.ViewHolder(itemView){
-    var name: TextView =itemView.tematicaTrivias
+    var name: TextView = itemView.textView_Name
 }
 
 internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity: Activity, private var itemUsuario: MutableList<Item_Usuario>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private val VIEW_TYPE_ITEM=0
     private val VIEW_TYPE_LOADING=1
-    private lateinit var name: String
-    private lateinit var databaseReference: DatabaseReference
 
     override fun getItemCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return itemUsuario.size
     }
 
 
@@ -42,7 +41,7 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ItemViewHolderUser){
             itemUsuario[position].getName()
-            holder.name.text = itemUsuario[position]!!.completeName
+            holder.name.text = itemUsuario[position].completeName
         }
         else if(holder is LoadingViewHolder){
             holder.progressBar.isIndeterminate = true
@@ -52,7 +51,7 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if(viewType==VIEW_TYPE_ITEM){
             val view = LayoutInflater.from(activity).inflate(R.layout.item_usuario,parent,false)
-            return ItemViewHolder(view)
+            return ItemViewHolderUser(view)
         }
         else if(viewType==VIEW_TYPE_LOADING){
             val view = LayoutInflater.from(activity).inflate(R.layout.item_cargando,parent,false)
@@ -94,7 +93,6 @@ class MatchActivity : AppCompatActivity() {
     private val activity=this
     private lateinit var adapter: AdaptadorUsuario
     private var itemUsuariouid: MutableList<Item_Usuario> = ArrayList()
-    private var vMf: String = ""
     private lateinit var Ref: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,51 +119,48 @@ class MatchActivity : AppCompatActivity() {
     private fun getRTrivias(){
         recyclerView.layoutManager =LinearLayoutManager(this)
 
-        dbRefgetTrivias = FirebaseDatabase.getInstance().getReference("Users/" + FirebaseAuth.getInstance().uid.toString() + "/Trivias/$Ref/Medieval")
+        dbRefgetTrivias = FirebaseDatabase.getInstance().getReference("Users/" + FirebaseAuth.getInstance().uid.toString() + "/Trivias/$Ref")
 
         dbRefgetTrivias.addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                var i=0
-                var valor=0.0
-                for(dS in p0.children){
-                    valor += (dS.value).toString().toInt()
-                    i++
-                }
-                valor /= i
+               for (j in p0.children){
+                   var i=0
+                   var valor=0.0
+                   for(dS in j.children){
+                       valor += (dS.value).toString().toInt()
+                       i++
+                   }
+                   valor /= i
 
-                val vM = when (valor){
-                    in 0..20 -> 20.toString()
-                    in 21..50 ->50.toString()
-                    in 51..70 ->70.toString()
-                    else -> 100.toString()
-                }
-                vMf = vM
-                dbRefgetTrivias.onDisconnect()
-                getUsersID()
-            }
-        })
-    }
+                   val vM = when (valor){
+                       in 0..20 -> 20.toString()
+                       in 21..50 ->50.toString()
+                       in 51..70 ->70.toString()
+                       else -> 100.toString()
+                   }
 
-    private fun getUsersID(){
-        dbRefgetUsers = FirebaseDatabase.getInstance().getReference("Matching/$Ref/Medieval/$vMf")
+                   dbRefgetUsers = FirebaseDatabase.getInstance().getReference("Matching/$Ref/${j.key}/$vM")
 
-        dbRefgetUsers.addListenerForSingleValueEvent(object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(dS: DataSnapshot) {
+                   dbRefgetUsers.addValueEventListener(object :ValueEventListener{
+                       override fun onCancelled(p0: DatabaseError) {}
+                       override fun onDataChange(dS: DataSnapshot) {
 
-                for(i in dS.children){
-                    if (i.key.toString() != FirebaseAuth.getInstance().uid){
-                        val user: String = i.key.toString()
-                        val item = Item_Usuario(user)
-                        itemUsuariouid.add(item)
-                    }
-                }
-                //Inicializando Vista
-                adapter = AdaptadorUsuario(recyclerView, activity , itemUsuariouid)
-                recyclerView.adapter = adapter
+                           for(k in dS.children){
+                               if (k.key.toString() != FirebaseAuth.getInstance().uid){
+                                   val user: String = k.key.toString()
+                                   val item = Item_Usuario(user)
+                                   itemUsuariouid.add(item)
+                               }
+                           }
+                           //Inicializando Vista
+                           adapter = AdaptadorUsuario(recyclerView, activity , itemUsuariouid)
+                           recyclerView.adapter = adapter
+                       }
+                   })
+               }
             }
         })
     }
@@ -192,7 +187,7 @@ class MatchActivity : AppCompatActivity() {
                 item.itemId == R.id.navigation_profile -> startActivity(Intent(this@MatchActivity, PrivateProfileActivity::class.java))
                 item.itemId == R.id.navigation_match -> startActivity(Intent(this@MatchActivity, MatchActivity::class.java))
                 item.itemId == R.id.navigation_trivias -> startActivity(Intent(this@MatchActivity, TriviasTemasActivity::class.java))
-                item.itemId != null -> return@OnNavigationItemSelectedListener true
+                else -> return@OnNavigationItemSelectedListener true
             }
             false
         })
