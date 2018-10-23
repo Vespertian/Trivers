@@ -10,22 +10,18 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
-import com.art3mis.trivers.adaptador.ItemViewHolder
+import android.widget.*
 import com.art3mis.trivers.adaptador.LoadingViewHolder
 import com.art3mis.trivers.adaptador.nullViewHolder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_match.*
-import kotlinx.android.synthetic.main.item_tematicas.view.*
 import kotlinx.android.synthetic.main.item_usuario.view.*
 import java.util.*
 
 internal class ItemViewHolderUser(itemView: View) : RecyclerView.ViewHolder(itemView){
     var name: TextView = itemView.textView_Name
+    var photo: ImageView = itemView.imageView
 }
 
 internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity: Activity, private var itemUsuario: MutableList<Item_Usuario>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -42,8 +38,8 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ItemViewHolderUser){
-            itemUsuario[position].getName()
-            holder.name.text = itemUsuario[position].completeName
+            itemUsuario[position]
+            holder.name.text = itemUsuario[position].name
         }
         else if(holder is LoadingViewHolder){
             holder.progressBar.isIndeterminate = true
@@ -64,27 +60,8 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
 
 }
 
-data class Item_Usuario (var uid: String){
-    private lateinit var databaseReference: DatabaseReference
+data class Item_Usuario (var name: String){
     lateinit var completeName: String
-    fun getName(){
-        //Debo de poner esto en un lugar donde sí ejecute antes de dar el valor del textView
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users/$uid")
-        databaseReference.addValueEventListener(object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                completeName = if (p0.child("lastName").value.toString() != "NoLastName"){
-                    p0.child("name").value.toString() + p0.child("lastName").value.toString()
-                } else{
-                    p0.child("name").value.toString()
-                }
-            }
-
-        })
-    }
 }
 
 class MatchActivity : AppCompatActivity() {
@@ -95,8 +72,9 @@ class MatchActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private val activity=this
     private lateinit var adapter: AdaptadorUsuario
-    private var itemUsuariouid: MutableList<Item_Usuario> = ArrayList()
+    private var itemUsuario: MutableList<Item_Usuario> = ArrayList()
     private lateinit var Ref: String
+    private lateinit var databaseReference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +93,7 @@ class MatchActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 Ref = parent!!.getItemAtPosition(position).toString()
                 getRTrivias()
+                itemUsuario.clear()
             }
         }
     }
@@ -153,14 +132,30 @@ class MatchActivity : AppCompatActivity() {
 
                            for(k in dS.children){
                                if (k.key.toString() != FirebaseAuth.getInstance().uid){
-                                   val user: String = k.key.toString()
-                                   val item = Item_Usuario(user)
-                                   itemUsuariouid.add(item)
+                                   val userUId: String = k.key.toString()
+
+                                   databaseReference = FirebaseDatabase.getInstance().getReference("Users/$userUId")
+                                   databaseReference.addValueEventListener(object :ValueEventListener{
+                                       override fun onCancelled(p0: DatabaseError) {
+                                           TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                                       }
+
+                                       override fun onDataChange(p0: DataSnapshot) {
+                                           val item = Item_Usuario(if (p0.child("lastName").value.toString() != "NoLastName"){
+                                               p0.child("name").value.toString() + " " + p0.child("lastName").value.toString()
+                                           } else{
+                                               p0.child("name").value.toString()
+                                           })
+                                           itemUsuario.add(item)
+                                           //Inicializando Vista
+                                           adapter = AdaptadorUsuario(recyclerView, activity , itemUsuario)
+                                           recyclerView.adapter = adapter
+                                       }
+
+                                   })
                                }
                            }
-                           //Inicializando Vista
-                           adapter = AdaptadorUsuario(recyclerView, activity , itemUsuariouid)
-                           recyclerView.adapter = adapter
+
                        }
                    })
                }
