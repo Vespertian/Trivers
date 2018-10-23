@@ -2,6 +2,7 @@ package com.art3mis.trivers
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.art3mis.trivers.adaptador.LoadingViewHolder
 import com.art3mis.trivers.adaptador.nullViewHolder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_match.*
 import kotlinx.android.synthetic.main.item_usuario.view.*
 import java.util.*
@@ -40,6 +42,15 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
         if(holder is ItemViewHolderUser){
             itemUsuario[position]
             holder.name.text = itemUsuario[position].name
+
+            val imageReference= FirebaseStorage.getInstance().reference.child("imagenes/"+itemUsuario[position].imageRef)
+            if(imageReference.toString()!=""){
+                val ONE_MEGABYTE=(1024*1024).toLong()
+                imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener { bytes ->
+                    val bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
+                    holder.photo.setImageBitmap(bmp)
+                }
+            }
         }
         else if(holder is LoadingViewHolder){
             holder.progressBar.isIndeterminate = true
@@ -60,9 +71,7 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
 
 }
 
-data class Item_Usuario (var name: String){
-    lateinit var completeName: String
-}
+data class Item_Usuario (var name: String, var imageRef: String)
 
 class MatchActivity : AppCompatActivity() {
     private lateinit var dbRefgetTrivias: DatabaseReference
@@ -108,6 +117,7 @@ class MatchActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
+                itemUsuario.clear()
                for (j in p0.children){
                    var i=0
                    var valor=0.0
@@ -129,7 +139,6 @@ class MatchActivity : AppCompatActivity() {
                    dbRefgetUsers.addValueEventListener(object :ValueEventListener{
                        override fun onCancelled(p0: DatabaseError) {}
                        override fun onDataChange(dS: DataSnapshot) {
-
                            for(k in dS.children){
                                if (k.key.toString() != FirebaseAuth.getInstance().uid){
                                    val userUId: String = k.key.toString()
@@ -141,11 +150,12 @@ class MatchActivity : AppCompatActivity() {
                                        }
 
                                        override fun onDataChange(p0: DataSnapshot) {
+                                           val imageRef = p0.child("fPerfi").value.toString()
                                            val item = Item_Usuario(if (p0.child("lastName").value.toString() != "NoLastName"){
                                                p0.child("name").value.toString() + " " + p0.child("lastName").value.toString()
                                            } else{
                                                p0.child("name").value.toString()
-                                           })
+                                           }, imageRef)
                                            itemUsuario.add(item)
                                            //Inicializando Vista
                                            adapter = AdaptadorUsuario(recyclerView, activity , itemUsuario)
