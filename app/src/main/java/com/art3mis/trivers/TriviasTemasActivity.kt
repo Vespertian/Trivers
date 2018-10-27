@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import com.art3mis.trivers.adaptador.AdaptadorTemática
 import com.art3mis.trivers.modelos.Item_Tematica
 import com.google.firebase.auth.FirebaseAuth
@@ -40,7 +41,7 @@ class TriviasTemasActivity:AppCompatActivity(){
         usuario= uAuth.currentUser!!
         database= FirebaseDatabase.getInstance()
         dbUserRef=database.getReference("Users").child(usuario.uid)
-        dbTriviaRef=database.getReference("Trivias/Tematicas")
+        dbTriviaRef=database.getReference("Trivias")
         navigation = findViewById(R.id.navigation)
         navigation()
         spinnerTematicas=findViewById(R.id.spinnerTematicas)
@@ -113,16 +114,21 @@ class TriviasTemasActivity:AppCompatActivity(){
         dbSTRef.addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(dS: DataSnapshot) {
-
-                for(i in dS.children){
-                    val tem: String = i.key.toString()
-                    val numT: String = i.childrenCount.toString()
-                    val item = Item_Tematica(tem, numT)
-                    itemTematicas.add(item)
-                }
-                //Inicializando Vista
-                adapter= AdaptadorTemática(recicler_view,activity,itemTematicas)
-                recicler_view.adapter=adapter
+                dbUserRef.addListenerForSingleValueEvent(object :ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {}
+                    override fun onDataChange(p0: DataSnapshot) {
+                        for(i in dS.children){
+                            val tem: String = i.key.toString()
+                            val numT: String = i.childrenCount.toString()
+                            val numTR:String = p0.child("Trivias/$sTem").childrenCount.toString()
+                            val item = Item_Tematica(tem, numT, numTR)
+                            itemTematicas.add(item)
+                        }
+                        //Inicializando Vista
+                        adapter= AdaptadorTemática(recicler_view,activity,itemTematicas)
+                        recicler_view.adapter=adapter
+                    }
+                })
             }
         })
 //        adapter.setCargarMas(this) //no funciona :v
