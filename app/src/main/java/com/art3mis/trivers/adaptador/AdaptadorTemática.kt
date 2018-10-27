@@ -19,6 +19,7 @@ internal class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view) {//
 internal class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){//Solo tematicas
     var tematicaTrivias:TextView=itemView.tematicaTrivias
     var numTrivias:TextView=itemView.numTrivias
+    var numTR:TextView=itemView.triviasRespondidas
 }
 
 internal class nullViewHolder(view:View):RecyclerView.ViewHolder(view){
@@ -77,6 +78,7 @@ class AdaptadorTemática(reciclerView: RecyclerView,internal var activity: Activ
         if(holder is ItemViewHolder){
             holder.tematicaTrivias.text=itemTematicas[position]!!.tematicaTrivias
             holder.numTrivias.text="Hay "+itemTematicas[position]!!.numTrivias +" Trivias"
+            holder.numTR.text=if(itemTematicas[position]!!.numTR=="1")"1 trivia respondida" else itemTematicas[position]!!.numTR+" trivias respondidas"
         }
         else if(holder is LoadingViewHolder){
             holder.progressBar.isIndeterminate=true
