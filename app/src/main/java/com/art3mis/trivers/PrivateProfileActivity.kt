@@ -40,6 +40,8 @@ open class PrivateProfileActivity : AppCompatActivity() {
     private lateinit var eEdadB:Button
     private lateinit var eEdadC:EditText
     private lateinit var eEdadCB:Button
+    private lateinit var sexo: TextView
+    private lateinit var sexoB: TextView
     private lateinit var navigation: BottomNavigationView
     private var fileUri: Uri? =null
     private var bitmap: Bitmap? = null
@@ -63,6 +65,8 @@ open class PrivateProfileActivity : AppCompatActivity() {
         eEdadB=findViewById(R.id.eEdadB)
         eEdadC=findViewById(R.id.eEdadC)
         eEdadCB=findViewById(R.id.eEdadCB)
+        sexo = findViewById(R.id.Sexo)
+        sexoB = findViewById(R.id.SexoB)
         navigation = findViewById(R.id.navigation)
         navigation()
         actualizar()
@@ -99,6 +103,8 @@ open class PrivateProfileActivity : AppCompatActivity() {
                 eRMinimo.text = dS.child("rangoMinimo").value.toString()
                 eRMinimoE.setText(dS.child("rangoMinimo").value.toString())
                 eRMaximo.text = dS.child("rangoMaximo").value.toString()
+                sexo.text = dS.child("Genero").value.toString()
+                sexoB.text = dS.child("GeneroB").value.toString()
                 eRMaximoE.setText(dS.child("rangoMaximo").value.toString())
                 imageReference=FirebaseStorage.getInstance().reference.child("imagenes/"+dS.child("fPerfi").value.toString())
                 if(imageReference.toString()!=""){

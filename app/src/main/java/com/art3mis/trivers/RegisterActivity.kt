@@ -51,6 +51,10 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private lateinit var rangoMaximo: String
     private lateinit var description: String
     private lateinit var imgView: ImageView
+    private lateinit var GMas: RadioButton
+    private lateinit var GFem: RadioButton
+    private lateinit var GMasB: RadioButton
+    private lateinit var GFemB: RadioButton
     private val GALLERY =1
     private val CAMARA =2
     private var fileUri: Uri? =null
@@ -73,6 +77,10 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         editText_RangoMinimo = findViewById(R.id.editText_RangoMinimo)
         editText_RangoMaximo = findViewById(R.id.editText_RangoMaximo)
         editText_Description = findViewById(R.id.editText_Description)
+        GMas = findViewById(R.id.GMas)
+        GFem = findViewById(R.id.GFem)
+        GMasB = findViewById(R.id.GMasB)
+        GFemB = findViewById(R.id.GFemB)
         editText_Name.addTextChangedListener(this)
         editText_LastName.addTextChangedListener(this)
         editText_Age.addTextChangedListener(this)
@@ -205,13 +213,33 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                     Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
                                 }
 
-                        information().registerInformation(user, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension())
+                        val gen = when {
+                            GMas.isChecked -> "Hombre"
+                            GFem.isChecked -> "Mujer"
+                            else -> "Nada"
+                        }
+                        val genB = when {
+                            GMasB.isChecked -> "Hombre"
+                            GFemB.isChecked -> "Mujer"
+                            else -> "Nada"
+                        }
+                        information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
                         alert {
                             title("Registro completado")
                             okButton {action_PrivateProfile()}
                         }.show()
                     }else {
-                        information().registerInformation(user, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description)
+                        val gen = when {
+                            GMas.isChecked -> "Hombre"
+                            GFem.isChecked -> "Mujer"
+                            else -> "Nada"
+                        }
+                        val genB = when {
+                            GMasB.isChecked -> "Hombre"
+                            GFemB.isChecked -> "Mujer"
+                            else -> "Nada"
+                        }
+                        information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description, gen, genB)
                         alert {
                             title("Registro completado")
                             okButton {action_PrivateProfile()}
@@ -227,6 +255,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         } else{
             if (!name.isEmpty()&&!lastName.isEmpty()&&!age.isEmpty()&&!email.isEmpty()&&!password.isEmpty()&&!rangoMinimo.isEmpty()&&!rangoMaximo.isEmpty()&&!description.isEmpty()){
                 if(age.toInt()<18){
+                    auth.currentUser!!.delete()
                     alert("Por favor no sigas intentando") {
                         title("Error")
                         okButton {actionLoginActivity()}
@@ -241,10 +270,6 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                 val user:FirebaseUser? = auth.currentUser
                                 verifyEmail(user)
 
-                                alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
-                                    title("Registro completado")
-                                    okButton {actionLoginActivity()}
-                                }.show()
                                 if(rangoMinimo.toInt()<18){
                                     rangoMinimo="18"
                                 }
@@ -270,9 +295,33 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                             .addOnFailureListener { exception ->
                                                 Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
                                             }
-                                    information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension())
+                                    val gen = when {
+                                        GMas.isChecked -> "Hombre"
+                                        GFem.isChecked -> "Mujer"
+                                        else -> "Nada"
+                                    }
+                                    val genB = when {
+                                        GMasB.isChecked -> "Hombre"
+                                        GFemB.isChecked -> "Mujer"
+                                        else -> "Nada"
+                                    }
+                                    information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
                                 }else {
-                                    information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description)
+                                    val gen = when {
+                                        GMas.isChecked -> "Hombre"
+                                        GFem.isChecked -> "Mujer"
+                                        else -> "Nada"
+                                    }
+                                    val genB = when {
+                                        GMasB.isChecked -> "Hombre"
+                                        GFemB.isChecked -> "Mujer"
+                                        else -> "Nada"
+                                    }
+                                    information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description, gen, genB)
+                                    alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
+                                        title("Registro completado")
+                                        okButton {actionLoginActivity()}
+                                    }.show()
                                 }
                             } else{
                                 alert("No se pudo crear la cuenta") {

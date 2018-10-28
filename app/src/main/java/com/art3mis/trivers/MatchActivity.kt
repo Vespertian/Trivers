@@ -74,7 +74,7 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
 data class Item_Usuario (var name: String, var imageRef: String)
 
 class MatchActivity : AppCompatActivity() {
-    private lateinit var dbRefgetTrivias: DatabaseReference
+    private lateinit var dbRefgetUser: DatabaseReference
     private lateinit var dbRefgetUsers: DatabaseReference
     private lateinit var spinner: Spinner
     private lateinit var adapterTematica: ArrayAdapter<CharSequence>
@@ -102,23 +102,26 @@ class MatchActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 Ref = parent!!.getItemAtPosition(position).toString()
                 getRTrivias()
-                itemUsuario.clear()
             }
         }
     }
 
     private fun getRTrivias(){
         recyclerView.layoutManager =LinearLayoutManager(this)
+        itemUsuario.clear()
 
-        dbRefgetTrivias = FirebaseDatabase.getInstance().getReference("Users/" + FirebaseAuth.getInstance().uid.toString() + "/Trivias/$Ref")
+        dbRefgetUser = FirebaseDatabase.getInstance().getReference("Users/" + FirebaseAuth.getInstance().uid.toString())
 
-        dbRefgetTrivias.addListenerForSingleValueEvent(object :ValueEventListener{
+        dbRefgetUser.addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                itemUsuario.clear()
-               for (j in p0.children){
+                val rMin = p0.child("rangoMinimo").value.toString().toInt()
+                val rMax = p0.child("rangoMaximo").value.toString().toInt()
+                val gen = p0.child("Genero").value.toString()
+                val genB = p0.child("GeneroB").value.toString()
+               for (j in p0.child("/Trivias/$Ref").children){
                    var i=0
                    var valor=0.0
                    for(dS in j.children){
@@ -150,18 +153,19 @@ class MatchActivity : AppCompatActivity() {
                                        }
 
                                        override fun onDataChange(p0: DataSnapshot) {
-                                           val imageRef = p0.child("fPerfi").value.toString()
-                                           val item = Item_Usuario(if (p0.child("lastName").value.toString() != "NoLastName"){
-                                               p0.child("name").value.toString() + " " + p0.child("lastName").value.toString()
-                                           } else{
-                                               p0.child("name").value.toString()
-                                           }, imageRef)
-                                           itemUsuario.add(item)
-                                           //Inicializando Vista
-                                           adapter = AdaptadorUsuario(recyclerView, activity , itemUsuario)
-                                           recyclerView.adapter = adapter
+                                           if (p0.child("age").value.toString().toInt() in rMin..rMax && p0.child("GeneroB").value.toString() == gen && p0.child("Genero").value.toString() == genB){
+                                               val imageRef = p0.child("fPerfi").value.toString()
+                                               val item = Item_Usuario(if (p0.child("lastName").value.toString() != "NoLastName"){
+                                                   p0.child("name").value.toString() + " " + p0.child("lastName").value.toString()
+                                               } else{
+                                                   p0.child("name").value.toString()
+                                               }, imageRef)
+                                               itemUsuario.add(item)
+                                               //Inicializando Vista
+                                               adapter = AdaptadorUsuario(recyclerView, activity , itemUsuario)
+                                               recyclerView.adapter = adapter
+                                           }
                                        }
-
                                    })
                                }
                            }
@@ -174,11 +178,10 @@ class MatchActivity : AppCompatActivity() {
     }
 
     private fun cargarTematicas() {
-        dbRefgetTrivias = FirebaseDatabase.getInstance().getReference("Trivias/Tematicas")
-        dbRefgetTrivias.addValueEventListener(object : ValueEventListener {
+        dbRefgetUser = FirebaseDatabase.getInstance().getReference("Trivias")
+        dbRefgetUser.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(dS: DataSnapshot) {
-//                adapterTematica.add("Tod")
                 for (i in dS.children) {
                     adapterTematica.add(i.key.toString())
                 }

@@ -11,7 +11,7 @@ open class information: AppCompatActivity() {
     private lateinit var dbreference: DatabaseReference
     private lateinit var userID: String
 
-    fun registerInformation(user: FirebaseUser, name: String, lastName: String?, email:String, age: String, phoneNumber: String, rangoMinimo: String, rangoMaximo: String, description: String, fPerfil:String){
+    fun registerInformation(user: FirebaseUser, name: String, lastName: String?, email:String, age: String, phoneNumber: String, rangoMinimo: String, rangoMaximo: String, description: String, fPerfil:String, Genero: String, GeneroB: String){
         dbreference = FirebaseDatabase.getInstance().getReference("Users")
         val userI: HashMap<String, Any?> = HashMap()
         userI["name"] = name
@@ -23,6 +23,8 @@ open class information: AppCompatActivity() {
         userI["rangoMaximo"] = rangoMaximo
         userI["description"] = description
         userI["fPerfi"] = fPerfil
+        userI["Genero"] = Genero
+        userI["GeneroB"] = GeneroB
         dbreference.child(user!!.uid).setValue(userI).addOnCompleteListener(this) {
             task ->
 
@@ -35,7 +37,7 @@ open class information: AppCompatActivity() {
         }
     }
 
-    fun registerInformation(user: FirebaseUser, name: String, lastName: String?, email:String, age: String, phoneNumber: String, rangoMinimo: String, rangoMaximo: String, description: String){
+    fun registerInformation(user: FirebaseUser, name: String, lastName: String?, email:String, age: String, phoneNumber: String, rangoMinimo: String, rangoMaximo: String, description: String, Genero: String, GeneroB: String){
         dbreference = FirebaseDatabase.getInstance().getReference("Users")
         val userI: HashMap<String, Any?> = HashMap()
         userI["name"] = name
@@ -46,6 +48,8 @@ open class information: AppCompatActivity() {
         userI["rangoMinimo"] = rangoMinimo
         userI["rangoMaximo"] = rangoMaximo
         userI["description"] = description
+        userI["Genero"] = Genero
+        userI["GeneroB"] = GeneroB
         dbreference.child(user!!.uid).setValue(userI).addOnCompleteListener(this) {
             task ->
 
@@ -56,9 +60,5 @@ open class information: AppCompatActivity() {
                 }.show()
             }
         }
-    }
-
-    fun getUserInformation(email: String, password: String){
-
     }
 }

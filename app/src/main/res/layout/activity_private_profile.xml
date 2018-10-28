@@ -125,62 +125,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:textSize="18sp" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="70sp"
-                    android:layout_height="wrap_content"
-                    android:text="Edad"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/eEdad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:textSize="18sp" />
-
-                <Button
-                    android:id="@+id/eEdadB"
-                    style="@style/Widget.AppCompat.Button.Small"
-                    android:layout_width="20sp"
-                    android:layout_height="20sp"
-                    android:layout_gravity="fill_horizontal"
-                    android:background="@android:drawable/ic_menu_edit"
-                    android:onClick="eEdadButton" />
-
-                <EditText
-                    android:id="@+id/eEdadC"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/eEdadCB"
-                    style="@style/Widget.AppCompat.Button.Small"
-                    android:layout_width="20sp"
-                    android:layout_height="20sp"
-                    android:background="@android:drawable/ic_menu_save"
-                    android:onClick="eEdadButtonC"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/cEdadB"
-                    style="@style/Widget.AppCompat.Button.Small"
-                    android:layout_width="20sp"
-                    android:layout_height="20sp"
-                    android:background="@android:drawable/ic_delete"
-                    android:onClick="cEdadB"
-                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -235,6 +179,60 @@
                     android:layout_height="20sp"
                     android:background="@android:drawable/ic_delete"
                     android:onClick="cTelefonoB"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="70sp"
+                    android:layout_height="wrap_content"
+                    android:text="Edad"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/eEdad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/eEdadB"
+                    style="@style/Widget.AppCompat.Button.Small"
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
+                    android:layout_gravity="fill_horizontal"
+                    android:background="@android:drawable/ic_menu_edit"
+                    android:onClick="eEdadButton" />
+
+                <EditText
+                    android:id="@+id/eEdadC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/eEdadCB"
+                    style="@style/Widget.AppCompat.Button.Small"
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
+                    android:background="@android:drawable/ic_menu_save"
+                    android:onClick="eEdadButtonC"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/cEdadB"
+                    style="@style/Widget.AppCompat.Button.Small"
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
+                    android:background="@android:drawable/ic_delete"
+                    android:onClick="cEdadB"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -321,6 +319,44 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="70sp"
+                    android:layout_height="wrap_content"
+                    android:text="Sexo"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Sexo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="70sp"
+                    android:layout_height="wrap_content"
+                    android:text="Buscas"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/SexoB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/button"
                 android:layout_width="match_parent"
@@ -334,6 +370,8 @@
                 android:visibility="gone"
                 android:textColor="@android:color/white"/>
         </LinearLayout>
+
+
     </ScrollView>
 
     <android.support.design.widget.BottomNavigationView
