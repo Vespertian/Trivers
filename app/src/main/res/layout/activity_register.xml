@@ -180,7 +180,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hombre"
+                    android:text="Hombres"
                     android:textSize="16sp"
                     android:layout_marginRight="10dp"/>
                 <RadioButton
@@ -190,7 +190,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mujer"
+                    android:text="Mujeres"
                     android:textSize="16sp"
                     android:layout_marginRight="10dp"/>
             </RadioGroup>

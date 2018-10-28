@@ -219,8 +219,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                             else -> "Nada"
                         }
                         val genB = when {
-                            GMasB.isChecked -> "Hombre"
-                            GFemB.isChecked -> "Mujer"
+                            GMasB.isChecked -> "Hombres"
+                            GFemB.isChecked -> "Mujeres"
                             else -> "Nada"
                         }
                         information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
@@ -235,8 +235,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                             else -> "Nada"
                         }
                         val genB = when {
-                            GMasB.isChecked -> "Hombre"
-                            GFemB.isChecked -> "Mujer"
+                            GMasB.isChecked -> "Hombres"
+                            GFemB.isChecked -> "Mujeres"
                             else -> "Nada"
                         }
                         information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description, gen, genB)
@@ -301,8 +301,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                         else -> "Nada"
                                     }
                                     val genB = when {
-                                        GMasB.isChecked -> "Hombre"
-                                        GFemB.isChecked -> "Mujer"
+                                        GMasB.isChecked -> "Hombres"
+                                        GFemB.isChecked -> "Mujeres"
                                         else -> "Nada"
                                     }
                                     information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
@@ -313,8 +313,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                         else -> "Nada"
                                     }
                                     val genB = when {
-                                        GMasB.isChecked -> "Hombre"
-                                        GFemB.isChecked -> "Mujer"
+                                        GMasB.isChecked -> "Hombres"
+                                        GFemB.isChecked -> "Mujeres"
                                         else -> "Nada"
                                     }
                                     information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description, gen, genB)
