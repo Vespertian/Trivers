@@ -177,6 +177,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
     private fun createNewAccount(){
         if (intent.getBooleanExtra("Google_Login", false)){
             if(!age.isEmpty()&&!rangoMinimo.isEmpty()&&!rangoMaximo.isEmpty()&&!description.isEmpty()){
+                progessBar.visibility = View.VISIBLE
                 if (age.toInt()<18){
                     auth.currentUser!!.delete()
                     alert("Por favor no sigas intentando") {
@@ -223,11 +224,12 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                             GFemB.isChecked -> "Femenino"
                             else -> "Nada"
                         }
+                        information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
                         alert {
                             title("Registro completado")
-                            okButton {action_PrivateProfile()}
+                            okButton {action_PrivateProfile()
+                                progessBar.visibility = View.GONE}
                         }.show()
-                        information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
                     }else {
                         val gen = when {
                             GMas.isChecked -> "Masculino"
@@ -242,7 +244,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                         information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description, gen, genB)
                         alert {
                             title("Registro completado")
-                            okButton {action_PrivateProfile()}
+                            okButton {action_PrivateProfile()
+                                progessBar.visibility = View.GONE}
                         }.show()
                     }
                 }
@@ -254,6 +257,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
             }
         } else{
             if (!name.isEmpty()&&!lastName.isEmpty()&&!age.isEmpty()&&!email.isEmpty()&&!password.isEmpty()&&!rangoMinimo.isEmpty()&&!rangoMaximo.isEmpty()&&!description.isEmpty()){
+                progessBar.visibility = View.VISIBLE
                 if(age.toInt()<18){
                     auth.currentUser!!.delete()
                     alert("Por favor no sigas intentando") {
@@ -306,6 +310,11 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                         else -> "Nada"
                                     }
                                     information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
+                                    alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
+                                        title("Registro completado")
+                                        okButton {actionLoginActivity()
+                                            progessBar.visibility = View.GONE}
+                                    }.show()
                                 }else {
                                     val gen = when {
                                         GMas.isChecked -> "Masculino"
@@ -320,7 +329,8 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                     information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description, gen, genB)
                                     alert("Por favor verifica tu correo electrónico para poder Iniciar Sesión") {
                                         title("Registro completado")
-                                        okButton {actionLoginActivity()}
+                                        okButton {actionLoginActivity()
+                                        progessBar.visibility = View.GONE}
                                     }.show()
                                 }
                             } else{
