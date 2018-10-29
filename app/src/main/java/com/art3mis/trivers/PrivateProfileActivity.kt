@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.design.widget.BottomNavigationView
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.webkit.MimeTypeMap
@@ -85,45 +86,66 @@ open class PrivateProfileActivity : AppCompatActivity() {
         })
     }
 
-    private fun actualizar(){
-        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dS: DataSnapshot) {
-                if (dS.child("lastName").value.toString() != "NoLastName"){
-                    tNombre.text = dS.child("name").value.toString()+" "+dS.child("lastName").value.toString()
-                } else{
-                    tNombre.text = dS.child("name").value.toString()
-                }
-                eDescripcion.text = dS.child("description").value.toString()
-                eDescripcionC.setText(dS.child("description").value.toString())
-                eEdad.text = dS.child("age").value.toString()
-                eEmail.text = dS.child("email").value.toString()
-                eEdadC.setText( dS.child("age").value.toString())
-                eTelefono.text = dS.child("phoneNumber").value.toString()
-                eTelefonoC.setText(dS.child("phoneNumber").value.toString())
-                eRMinimo.text = dS.child("rangoMinimo").value.toString()
-                eRMinimoE.setText(dS.child("rangoMinimo").value.toString())
-                eRMaximo.text = dS.child("rangoMaximo").value.toString()
-                sexo.text = dS.child("Genero").value.toString()
-                sexoB.text = dS.child("GeneroB").value.toString()
-                eRMaximoE.setText(dS.child("rangoMaximo").value.toString())
-                imageReference=FirebaseStorage.getInstance().reference.child("imagenes/"+dS.child("fPerfi").value.toString())
-                if(imageReference.toString()!=""){
-                    val ONE_MEGABYTE=(1024*1024).toLong()
-                    imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener { bytes ->
-                        val bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
-                        imgPerfil.setImageBitmap(bmp)
-                    }.addOnFailureListener{exception ->
-                        Toast.makeText(this@PrivateProfileActivity,"error",Toast.LENGTH_LONG).show()
-                    }
-                }else{
-                    Toast.makeText(this@PrivateProfileActivity,"No tienes foto de perfil subida",Toast.LENGTH_LONG).show()
-                }
+    private fun setupActionBar(){
+        var actionBar: ActionBar = this.supportActionBar!!
+        if(intent.getStringExtra("uid") != null) {
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true)
+                actionBar.title = "Perfil público"
             }
-            override fun onCancelled(p0: DatabaseError) {
+        } else{
+            actionBar.title = "Perfil privado"
+        }
+    }
 
-            }
-        })
-        navigation.visibility = View.VISIBLE
+    private fun actualizar(){
+        setupActionBar()
+        if(intent.getStringExtra("uid") != null){
+            setPublicUser(intent.getStringExtra("uid"))
+        } else{
+            dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dS: DataSnapshot) {
+                    if (dS.child("lastName").value.toString() != "NoLastName"){
+                        tNombre.text = dS.child("name").value.toString()+" "+dS.child("lastName").value.toString()
+                    } else{
+                        tNombre.text = dS.child("name").value.toString()
+                    }
+                    eDescripcion.text = dS.child("description").value.toString()
+                    eDescripcionC.setText(dS.child("description").value.toString())
+                    eEdad.text = dS.child("age").value.toString()
+                    eEmail.text = dS.child("email").value.toString()
+                    eEdadC.setText( dS.child("age").value.toString())
+                    eTelefono.text = dS.child("phoneNumber").value.toString()
+                    eTelefonoC.setText(dS.child("phoneNumber").value.toString())
+                    eRMinimo.text = dS.child("rangoMinimo").value.toString()
+                    eRMinimoE.setText(dS.child("rangoMinimo").value.toString())
+                    eRMaximo.text = dS.child("rangoMaximo").value.toString()
+                    if(dS.child("GeneroB").value.toString() == "Masculino"){
+                        sexoB.text = "Hombres"
+                    } else if (dS.child("GeneroB").value.toString() == "Femenino"){
+                        sexoB.text = "Mujeres"
+                    }
+                    sexo.text = dS.child("Genero").value.toString()
+                    eRMaximoE.setText(dS.child("rangoMaximo").value.toString())
+                    imageReference=FirebaseStorage.getInstance().reference.child("imagenes/"+dS.child("fPerfi").value.toString())
+                    if(imageReference.toString()!=""){
+                        val ONE_MEGABYTE=(1024*1024).toLong()
+                        imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener { bytes ->
+                            val bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
+                            imgPerfil.setImageBitmap(bmp)
+                        }.addOnFailureListener{exception ->
+                            Toast.makeText(this@PrivateProfileActivity,"error",Toast.LENGTH_LONG).show()
+                        }
+                    }else{
+                        Toast.makeText(this@PrivateProfileActivity,"No tienes foto de perfil subida",Toast.LENGTH_LONG).show()
+                    }
+                }
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+            })
+            navigation.visibility = View.VISIBLE
+        }
     }
 
     fun eFoto(view: View){
@@ -176,6 +198,45 @@ open class PrivateProfileActivity : AppCompatActivity() {
         val cR=contentResolver
         val mime = MimeTypeMap.getSingleton()
         return mime.getExtensionFromMimeType(cR.getType(fileUri))
+    }
+
+    open fun setPublicUser(uid: String){
+        navigation.visibility = View.GONE
+        lyCorreo.visibility = View.GONE
+        lyBuscas.visibility = View.GONE
+        lyRango.visibility = View.GONE
+        eDescripcionB.visibility = View.GONE
+        eTelefonoB.visibility = View.GONE
+        eEdadB.visibility = View.GONE
+        eREdadesB.visibility = View.GONE
+        FirebaseDatabase.getInstance().getReference("Users/$uid").addValueEventListener(object :ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {}
+
+            override fun onDataChange(dS: DataSnapshot) {
+                if (dS.child("lastName").value.toString() != "NoLastName"){
+                    tNombre.text = dS.child("name").value.toString()+" "+dS.child("lastName").value.toString()
+                } else{
+                    tNombre.text = dS.child("name").value.toString()
+                }
+                eDescripcion.text = dS.child("description").value.toString()
+                eEdad.text = dS.child("age").value.toString()
+                eEdadC.setText( dS.child("age").value.toString())
+                eTelefono.text = dS.child("phoneNumber").value.toString()
+                Sexo.text = dS.child("Genero").value.toString()
+                imageReference=FirebaseStorage.getInstance().reference.child("imagenes/"+dS.child("fPerfi").value.toString())
+                if(imageReference.toString()!=""){
+                    val ONE_MEGABYTE=(1024*1024).toLong()
+                    imageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener { bytes ->
+                        val bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
+                        imgPerfil.setImageBitmap(bmp)
+                    }.addOnFailureListener{exception ->
+                        Toast.makeText(this@PrivateProfileActivity,"error",Toast.LENGTH_LONG).show()
+                    }
+                }else{
+                    Toast.makeText(this@PrivateProfileActivity,"No tienes foto de perfil subida",Toast.LENGTH_LONG).show()
+                }
+            }
+        })
     }
 
     fun eEdadButton(view: View){

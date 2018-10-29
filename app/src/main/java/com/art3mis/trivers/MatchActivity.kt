@@ -20,10 +20,16 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_match.*
 import kotlinx.android.synthetic.main.item_usuario.view.*
 import java.util.*
+import kotlin.collections.HashSet
+import android.text.method.TextKeyListener.clear
+
+
 
 internal class ItemViewHolderUser(itemView: View) : RecyclerView.ViewHolder(itemView){
     var name: TextView = itemView.textView_Name
     var photo: ImageView = itemView.imageView
+    var uid: TextView = itemView.txt_uid
+    var edad: TextView = itemView.txt_Edad
 }
 
 internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity: Activity, private var itemUsuario: MutableList<Item_Usuario>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -41,7 +47,9 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ItemViewHolderUser){
             itemUsuario[position]
+            holder.uid.text = itemUsuario[position].uid
             holder.name.text = itemUsuario[position].name
+            holder.edad.text = itemUsuario[position].edad + " años"
 
             val imageReference= FirebaseStorage.getInstance().reference.child("imagenes/"+itemUsuario[position].imageRef)
             if(imageReference.toString()!=""){
@@ -71,7 +79,7 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
 
 }
 
-data class Item_Usuario (var name: String, var imageRef: String)
+data class Item_Usuario (var name: String, var imageRef: String, var uid: String, var edad: String)
 
 class MatchActivity : AppCompatActivity() {
     private lateinit var dbRefgetUser: DatabaseReference
@@ -100,10 +108,17 @@ class MatchActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                itemUsuario.clear()
                 Ref = parent!!.getItemAtPosition(position).toString()
                 getRTrivias()
             }
         }
+    }
+
+    fun getUser(view: View){
+        val intent = Intent(this, PrivateProfileActivity::class.java)
+        intent.putExtra("uid", view.txt_uid.text.toString())
+        startActivity(intent)
     }
 
     private fun getRTrivias(){
@@ -153,14 +168,18 @@ class MatchActivity : AppCompatActivity() {
                                        }
 
                                        override fun onDataChange(p0: DataSnapshot) {
-                                           if (p0.child("age").value.toString().toInt() in rMin..rMax && p0.child("GeneroB").value.toString() == gen && p0.child("Genero").value.toString() == genB){
+                                           if (p0.child("age").value.toString().toInt() in rMin..rMax && p0.child("Genero").value.toString() == genB && p0.child("GeneroB").value.toString() == gen){
                                                val imageRef = p0.child("fPerfi").value.toString()
                                                val item = Item_Usuario(if (p0.child("lastName").value.toString() != "NoLastName"){
                                                    p0.child("name").value.toString() + " " + p0.child("lastName").value.toString()
                                                } else{
                                                    p0.child("name").value.toString()
-                                               }, imageRef)
+                                               }, imageRef, userUId, p0.child("age").value.toString())
                                                itemUsuario.add(item)
+                                               val hs = HashSet<Item_Usuario>()
+                                               hs.addAll(itemUsuario)
+                                               itemUsuario.clear()
+                                               itemUsuario.addAll(hs)
                                                //Inicializando Vista
                                                adapter = AdaptadorUsuario(recyclerView, activity , itemUsuario)
                                                recyclerView.adapter = adapter
@@ -169,7 +188,6 @@ class MatchActivity : AppCompatActivity() {
                                    })
                                }
                            }
-
                        }
                    })
                }

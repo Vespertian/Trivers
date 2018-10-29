@@ -109,6 +109,7 @@ class PreguntasActivity:AppCompatActivity() {
                             }
                             dbMatch.child(intent2.getStringExtra("subTematica")+"/"+vM+"/"+usuario.uid).setValue(usuario.uid)
                             finish()
+                            startActivity(Intent(this@PreguntasActivity, TriviasTemasActivity::class.java))
                         }
                     })
                 }

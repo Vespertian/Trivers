@@ -20,17 +20,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".PrivateProfileActivity" />
-        <activity android:name=".ForgotPassActivity" />
+        <activity android:name=".RegisterActivity" android:parentActivityName=".LoginActivity" />
+        <activity android:name=".PrivateProfileActivity" android:parentActivityName=".MatchActivity" />
+        <activity android:name=".ForgotPassActivity" android:parentActivityName=".LoginActivity" />
         <activity android:name=".information" />
         <activity android:name=".TriviasTemasActivity"
-            android:label="@string/title_trivias"/>
+            android:label="@string/title_trivias"
+            android:parentActivityName=".PrivateProfileActivity"/>
         <activity android:name=".TriviasActivity" android:parentActivityName=".TriviasTemasActivity"/>
         <activity android:name=".PreguntasActivity" android:parentActivityName=".TriviasActivity"/>
         <activity
             android:name=".MatchActivity"
-            android:label="@string/title_activity_match" />
+            android:label="@string/title_activity_match"
+            android:parentActivityName=".PrivateProfileActivity"/>
     </application>
 
 </manifest>

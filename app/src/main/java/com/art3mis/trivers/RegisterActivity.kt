@@ -214,29 +214,29 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                 }
 
                         val gen = when {
-                            GMas.isChecked -> "Hombre"
-                            GFem.isChecked -> "Mujer"
+                            GMas.isChecked -> "Masculino"
+                            GFem.isChecked -> "Femenino"
                             else -> "Nada"
                         }
                         val genB = when {
-                            GMasB.isChecked -> "Hombres"
-                            GFemB.isChecked -> "Mujeres"
+                            GMasB.isChecked -> "Masculino"
+                            GFemB.isChecked -> "Femenino"
                             else -> "Nada"
                         }
-                        information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
                         alert {
                             title("Registro completado")
                             okButton {action_PrivateProfile()}
                         }.show()
+                        information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
                     }else {
                         val gen = when {
-                            GMas.isChecked -> "Hombre"
-                            GFem.isChecked -> "Mujer"
+                            GMas.isChecked -> "Masculino"
+                            GFem.isChecked -> "Femenino"
                             else -> "Nada"
                         }
                         val genB = when {
-                            GMasB.isChecked -> "Hombres"
-                            GFemB.isChecked -> "Mujeres"
+                            GMasB.isChecked -> "Masculino"
+                            GFemB.isChecked -> "Femenino"
                             else -> "Nada"
                         }
                         information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description, gen, genB)
@@ -296,25 +296,25 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                                                 Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
                                             }
                                     val gen = when {
-                                        GMas.isChecked -> "Hombre"
-                                        GFem.isChecked -> "Mujer"
+                                        GMas.isChecked -> "Masculino"
+                                        GFem.isChecked -> "Femenino"
                                         else -> "Nada"
                                     }
                                     val genB = when {
-                                        GMasB.isChecked -> "Hombres"
-                                        GFemB.isChecked -> "Mujeres"
+                                        GMasB.isChecked -> "Masculino"
+                                        GFemB.isChecked -> "Femenino"
                                         else -> "Nada"
                                     }
                                     information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
                                 }else {
                                     val gen = when {
-                                        GMas.isChecked -> "Hombre"
-                                        GFem.isChecked -> "Mujer"
+                                        GMas.isChecked -> "Masculino"
+                                        GFem.isChecked -> "Femenino"
                                         else -> "Nada"
                                     }
                                     val genB = when {
-                                        GMasB.isChecked -> "Hombres"
-                                        GFemB.isChecked -> "Mujeres"
+                                        GMasB.isChecked -> "Masculino"
+                                        GFemB.isChecked -> "Femenino"
                                         else -> "Nada"
                                     }
                                     information().registerInformation(user!!, name, lastName, email, age, phoneNumber, rangoMinimo, rangoMaximo, description, gen, genB)

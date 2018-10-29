@@ -108,6 +108,7 @@
                 android:textStyle="bold" />
 
             <LinearLayout
+                android:id="@+id/lyCorreo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -237,6 +238,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lyRango"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -320,6 +322,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lySexo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -327,7 +330,7 @@
                 <TextView
                     android:layout_width="70sp"
                     android:layout_height="wrap_content"
-                    android:text="Sexo"
+                    android:text="Género"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -339,6 +342,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lyBuscas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -346,7 +350,7 @@
                 <TextView
                     android:layout_width="70sp"
                     android:layout_height="wrap_content"
-                    android:text="Buscas"
+                    android:text="Busca"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
