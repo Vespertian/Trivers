@@ -149,11 +149,13 @@ open class PrivateProfileActivity : AppCompatActivity() {
     }
 
     fun eFoto(view: View){
-        alert("¡Se eliminará la foto actual!") {
-            title("¡Cuidado!")
-            okButton {subirFotoP()}//Sin implementar...
-            noButton()
-        }.show()
+        if (intent.getStringExtra("uid") == null){
+            alert("¡Se eliminará la foto actual!") {
+                title("¡Cuidado!")
+                okButton {subirFotoP()}//Sin implementar...
+                noButton()
+            }.show()
+        }
     }
     private fun subirFotoP(){
         val galeriaIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
