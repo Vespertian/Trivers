@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -225,11 +226,10 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
                             else -> "Nada"
                         }
                         information().registerInformation(user!!, user.displayName!!, "NoLastName", user.email!!, age, phoneNumber, rangoMinimo, rangoMaximo, description,nombreImg + "." + extension(), gen, genB)
-                        alert {
-                            title("Registro completado")
-                            okButton {action_PrivateProfile()
-                                progessBar.visibility = View.GONE}
-                        }.show()
+                        Handler().postDelayed({
+                            Toast.makeText(baseContext,"Registro completado",Toast.LENGTH_SHORT).show()
+                            action_PrivateProfile()
+                        },2000)
                     }else {
                         val gen = when {
                             GMas.isChecked -> "Masculino"

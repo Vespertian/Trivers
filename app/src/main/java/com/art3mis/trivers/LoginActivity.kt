@@ -170,6 +170,7 @@ class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnec
 
             override fun onDataChange(dS: DataSnapshot) {
                 if (dS.child("lastName").value.toString() == "NoLastName") {
+                    finish()
                     action_PrivateProfile()
                 } else {
                     intent.putExtra("Google_Login", true)
@@ -178,6 +179,7 @@ class LoginActivity : AppCompatActivity(), TextWatcher, GoogleApiClient.OnConnec
                     } else {
                         intent.putExtra("Phone", false)
                     }
+                    finish()
                     startActivity(intent)
                 }
             }

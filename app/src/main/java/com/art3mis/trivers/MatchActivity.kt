@@ -76,7 +76,6 @@ internal class AdaptadorUsuario(reciclerView: RecyclerView, private var activity
         }
         return  nullViewHolder(view = LayoutInflater.from(activity).inflate(R.layout.item_cargando,parent,false))
     }
-
 }
 
 data class Item_Usuario (var name: String, var imageRef: String, var uid: String, var edad: String)
