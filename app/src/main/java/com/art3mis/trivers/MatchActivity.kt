@@ -167,21 +167,23 @@ class MatchActivity : AppCompatActivity() {
                                        }
 
                                        override fun onDataChange(p0: DataSnapshot) {
-                                           if (p0.child("age").value.toString().toInt() in rMin..rMax && p0.child("Genero").value.toString() == genB && p0.child("GeneroB").value.toString() == gen){
-                                               val imageRef = p0.child("fPerfi").value.toString()
-                                               val item = Item_Usuario(if (p0.child("lastName").value.toString() != "NoLastName"){
-                                                   p0.child("name").value.toString() + " " + p0.child("lastName").value.toString()
-                                               } else{
-                                                   p0.child("name").value.toString()
-                                               }, imageRef, userUId, p0.child("age").value.toString())
-                                               itemUsuario.add(item)
-                                               val hs = HashSet<Item_Usuario>()
-                                               hs.addAll(itemUsuario)
-                                               itemUsuario.clear()
-                                               itemUsuario.addAll(hs)
-                                               //Inicializando Vista
-                                               adapter = AdaptadorUsuario(recyclerView, activity , itemUsuario)
-                                               recyclerView.adapter = adapter
+                                           if(p0.exists()){
+                                               if (p0.child("age").value.toString().toInt() in rMin..rMax && p0.child("Genero").value.toString() == genB && p0.child("GeneroB").value.toString() == gen){
+                                                   val imageRef = p0.child("fPerfi").value.toString()
+                                                   val item = Item_Usuario(if (p0.child("lastName").value.toString() != "NoLastName"){
+                                                       p0.child("name").value.toString() + " " + p0.child("lastName").value.toString()
+                                                   } else{
+                                                       p0.child("name").value.toString()
+                                                   }, imageRef, userUId, p0.child("age").value.toString())
+                                                   itemUsuario.add(item)
+                                                   val hs = HashSet<Item_Usuario>()
+                                                   hs.addAll(itemUsuario)
+                                                   itemUsuario.clear()
+                                                   itemUsuario.addAll(hs)
+                                                   //Inicializando Vista
+                                                   adapter = AdaptadorUsuario(recyclerView, activity , itemUsuario)
+                                                   recyclerView.adapter = adapter
+                                               }
                                            }
                                        }
                                    })
